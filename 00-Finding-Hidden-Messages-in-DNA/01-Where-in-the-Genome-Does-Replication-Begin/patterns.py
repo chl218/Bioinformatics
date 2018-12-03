@@ -37,6 +37,21 @@ def FrequentWords(Text, k):
             
     return frequentPatterns
 
+def ReverseComplement(s):
+    res = []
+    
+    for p in s:
+        if p == 'T':
+            res.append('A')
+        elif p == 'A':
+            res.append('T')
+        elif p == 'G':
+            res.append('C')
+        elif p == 'C':
+            res.append('G')
+            
+    return ''.join(res[::-1])
+
 # %%    
 genome = np.loadtxt('dataset_2_7.txt', dtype='str');
 print(PatternCount(genome[0], genome[1]))
@@ -46,3 +61,8 @@ genome = np.loadtxt('dataset_2_10.txt', dtype='str');
 res = FrequentWords(genome[0], int(genome[1]))
 for seq in res:
     print(seq, ' ', end='')
+    
+# %%
+
+g = np.loadtxt('dataset_3_2.txt', dtype='str', ndmin=1)
+print(ReverseComplement(g[0]))
