@@ -1,6 +1,6 @@
 # %%
 import numpy as np
-
+import re
 
 # %%
 
@@ -52,6 +52,11 @@ def ReverseComplement(s):
             
     return ''.join(res[::-1])
 
+def PatternIndex(pattern, genome):
+    # regular expression with lookahead e.g. re.finditer((?=pattern), text)
+    return [iter.start() for iter in re.finditer('(?='+pattern+')', genome)]
+    
+    
 # %%    
 genome = np.loadtxt('dataset_2_7.txt', dtype='str');
 print(PatternCount(genome[0], genome[1]))
@@ -66,3 +71,16 @@ for seq in res:
 
 g = np.loadtxt('dataset_3_2.txt', dtype='str', ndmin=1)
 print(ReverseComplement(g[0]))
+
+# %%
+
+g = np.loadtxt('dataset_3_5.txt', dtype='str')
+for i in PatternIndex(g[0], g[1]):
+    print(i, '', end='')
+    
+# %%
+    
+vibrio_cholerae = np.loadtxt('Vibrio_cholerae.txt', dtype='str', ndmin=1)
+for i in PatternIndex('CTTGATCAT', vibrio_cholerae[0]):
+    print(i, '', end='')
+    
