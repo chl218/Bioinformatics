@@ -194,6 +194,19 @@ def NumberToPattern(number, k):
 
     return pattern
 
+def ComputingFrequencies(text, k):
+    frequencyArray = [0] * 4**k
+    
+    for i in range(0, len(text) - (k-1)):
+        frequencyArray[PatternToNumber(text[i:i+k])] += 1
+    
+    return frequencyArray
+    
+    
 
 print('ATGCCA', '-->', PatternToNumber('ATGCCA') , '-->', NumberToPattern(PatternToNumber('ATGCCA'), 6))
-    
+
+
+data = np.loadtxt('dataset_2994_5.txt', dtype='str', delimiter='\n ')
+for freq in ComputingFrequencies(data[0], int(data[1])):
+    print(freq, '', end='')
