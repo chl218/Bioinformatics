@@ -196,7 +196,7 @@ def ComputingFrequencies(text, k):
     frequencyArray = {}
     
     for i in range(0, len(text) - (k-1)):
-        key = PatternToNumber(text[i:i+k])
+        key = text[i:i+k]
         if key not in frequencyArray:
             frequencyArray[key] = 1
         else:
@@ -211,11 +211,43 @@ def FasterFrequentWords(text, k):
     
     for key in frequencyArray:
         if frequencyArray[key] == maxCount:
-            frequentPatterns.add(NumberToPattern(i, k))
+            frequentPatterns.add(NumberToPattern(key, k))
             
     return frequentPatterns
     
+def BetterClumpFinding(genome, k, L, t):
+    clumps = set()
+    # print(k, t, L)
+    text = genome[0:L]
+    frequencyMap = ComputingFrequencies(text, k)
+    
+    for key in frequencyMap:
+        if frequencyMap[key] >= t:
+            clumps.add(key)
+            
+    for i in range(1, len(genome) - L):
+        prevPattern = genome[i-1:i-1+k]
+        if prevPattern in frequencyMap:
+            frequencyMap[prevPattern] -= 1
+            
+        nextPattern = genome[i+L-k:i+L]
+        if nextPattern in frequencyMap:
+            frequencyMap[nextPattern] += 1
+        else:
+            frequencyMap[nextPattern] = 1
+            
+            
+        # print(i-1,i-1+k,prevPattern, i+L-k,i+L,nextPattern)
+        if frequencyMap[nextPattern] >= t:
+            clumps.add(nextPattern)
+            
+    
+    return clumps
 
-
-data = np.loadtxt('dataset_2994_5.txt', dtype='str', delimiter='\n ')
-print(ComputingFrequencies(data[0], int(data[1])))
+# %%
+    
+ecoli = np.loadtxt('E_coli.txt',  dtype='str', ndmin=1)
+for val in BetterClumpFinding(ecoli[0], 9, 500, 3):
+    print(' ', val, end='')
+    
+    
