@@ -165,23 +165,21 @@ for val in ClumpFinding(ecoli[0], 9, 500, 3):
 
 
 # %% 
-    
+
 def PatternToNumber(pattern):
-    
     num = 0
-    k = 0
+    k   = 0
     for p in pattern[::-1]:
-        if   p == 'A':  num += 0 * pow(4, k)
-        elif p == 'C':  num += 1 * pow(4, k)
-        elif p == 'G':  num += 2 * pow(4, k)
-        elif p == 'T':  num += 3 * pow(4, k)
+        if   p == 'A':  num += 0 * 4**k
+        elif p == 'C':  num += 1 * 4**k
+        elif p == 'G':  num += 2 * 4**k
+        elif p == 'T':  num += 3 * 4**k
         k += 1
         
     return num
 
 def NumberToPattern(number, k):
     pattern = ""
-    
     
     for i in range(0, k):
         r = number % 4
@@ -195,18 +193,29 @@ def NumberToPattern(number, k):
     return pattern
 
 def ComputingFrequencies(text, k):
-    frequencyArray = [0] * 4**k
+    frequencyArray = {}
     
     for i in range(0, len(text) - (k-1)):
-        frequencyArray[PatternToNumber(text[i:i+k])] += 1
-    
+        key = PatternToNumber(text[i:i+k])
+        if key not in frequencyArray:
+            frequencyArray[key] = 1
+        else:
+            frequencyArray[key] += 1
+            
     return frequencyArray
     
+def FasterFrequentWords(text, k):
+    frequentPatterns = set()
+    frequencyArray = ComputingFrequencies(text, k)
+    maxCount = max(frequencyArray.values())
     
-
-print('ATGCCA', '-->', PatternToNumber('ATGCCA') , '-->', NumberToPattern(PatternToNumber('ATGCCA'), 6))
+    for key in frequencyArray:
+        if frequencyArray[key] == maxCount:
+            frequentPatterns.add(NumberToPattern(i, k))
+            
+    return frequentPatterns
+    
 
 
 data = np.loadtxt('dataset_2994_5.txt', dtype='str', delimiter='\n ')
-for freq in ComputingFrequencies(data[0], int(data[1])):
-    print(freq, '', end='')
+print(ComputingFrequencies(data[0], int(data[1])))
