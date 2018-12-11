@@ -30,7 +30,6 @@ def FrequentWords(Text, k):
         count[i] = PatternCount(Text, pattern)
     maxCount = max(count)
     
-    print(count)
     # Search for most frequent k-mers
     for i in range(0, textLen - k + 1):
         if count[i] == maxCount:
@@ -38,10 +37,11 @@ def FrequentWords(Text, k):
             
     return frequentPatterns
 
-def ReverseComplement(s):
+# Return the reversed complement of DNA pattern
+def ReverseComplement(strand):
     res = []
     
-    for p in s:
+    for p in strand:
         if p == 'T':
             res.append('A')
         elif p == 'A':
@@ -53,36 +53,36 @@ def ReverseComplement(s):
             
     return ''.join(res[::-1])
 
+# Return the index in the genome that matches to the given pattern
 def PatternMatching(pattern, genome):
     # regular expression with lookahead e.g. re.finditer((?=pattern), text)
     return [iter.start() for iter in re.finditer('(?='+pattern+')', genome)]
     
-
-# Find all k k-mer in text
-def FindAllKmers(Text, k):
-    textLen = len(Text)
+# Find all k-mer in genome
+def FindAllKmers(genome, k):
+    textLen = len(genome)
     
     frequentPatterns = set()
     count = [0] * textLen
     
     # Search for k-mer patterns
     for i in range(0, textLen - k + 1):
-        pattern = Text[i:i+k]
-        count[i] = PatternCount(Text, pattern)
+        pattern = genome[i:i+k]
+        count[i] = PatternCount(genome, pattern)
     # Search for most frequent k-mers
     for i in range(0, textLen - k + 1):
         if count[i] > 1:
-            frequentPatterns.add(Text[i:i+k])
+            frequentPatterns.add(genome[i:i+k])
             
     return frequentPatterns
 
+# Find all k-mer appearence >= t in genome of length L
 def ClumpFinding(genome, k, L, t):
     clumps = []
     
-    print(k, L, t)
-    
+    # print(k, L, t)
     kmers = FindAllKmers(genome, k)
-    print(kmers)
+    # print(kmers)
     for kmer in kmers:
         idx = PatternMatching(kmer, genome)
     
@@ -90,17 +90,15 @@ def ClumpFinding(genome, k, L, t):
             continue
     
         idx = idx[::-1]
-        #print(kmer, idx)    
+        # print(kmer, idx)    
         
         for i in range(0, len(idx)):
             displacement = idx[i]
             count = 1
             flag = False
             #print('i =',i, count, displacement)
-
             for j in range(i+1, len(idx)):
                 #print('j =',j, count, displacement, idx[j])
-
                 if(displacement - idx[j] + k > L):
                     break
                 else:
@@ -115,52 +113,6 @@ def ClumpFinding(genome, k, L, t):
                 break
         
     return clumps    
-
-# %%    
-genome = np.loadtxt('dataset_2_7.txt', dtype='str');
-print(PatternCount(genome[0], genome[1]))
-
-# %%
-genome = np.loadtxt('dataset_2_10.txt', dtype='str');
-res = FrequentWords(genome[0], int(genome[1]))
-for seq in res:
-    print(seq, ' ', end='')
-    
-# %%
-
-g = np.loadtxt('dataset_3_2.txt', dtype='str', ndmin=1)
-print(ReverseComplement(g[0]))
-
-# %%
-
-g = np.loadtxt('dataset_3_5.txt', dtype='str')
-for i in PatternMatching(g[0], g[1]):
-    print(i, '', end='')
-    
-# %%
-    
-vibrio_cholerae = np.loadtxt('Vibrio_cholerae.txt', dtype='str', ndmin=1)
-for i in PatternMatching('CTTGATCAT', vibrio_cholerae[0]):
-    print(i, '', end='')
-    
-
-
-# %%
-data = np.loadtxt('dataset_4_5.txt', dtype='str', delimiter='\n ')
-param = [int(s) for s in data[1].split(' ')]
-for val in ClumpFinding(data[0], param[0], param[1], param[2]):
-    print(val, '', end='')
-
-ecoli = np.loadtxt('E_coli.txt',  dtype='str', ndmin=1)
-for val in ClumpFinding(ecoli[0], 9, 500, 3):
-    print(' ', val, end='')
-
-    
-#print(ClumpFinding('CGGACTCGACAGATGTGAAGAACGACAATGTGAAGACTCGACACGACAGAGTGAAGAGAAGAGGAAACATTGTAA', 5, 50, 4))
-#
-#print(ClumpFinding('AAAACGTCGAAAAA', 2, 4, 2))
-#
-#print(ClumpFinding('CCACGCGGTGTACGCTGCAAAAAGCCTTGCTGAATCAAATAAGGTTCCAGCACATCCTCAATGGTTTCACGTTCTTCGCCAATGGCTGCCGCCAGGTTATCCAGACCTACAGGTCCACCAAAGAACTTATCGATTACCGCCAGCAACAATTTGCGGTCCATATAATCGAAACCTTCAGCATCGACATTCAACATATCCAGCG', 3, 25, 3))
 
 
 
@@ -192,21 +144,23 @@ def NumberToPattern(number, k):
 
     return pattern
 
-def ComputingFrequencies(text, k):
+# Return the frequence occurance of k-mer in genome
+def ComputingFrequencies(genome, k):
     frequencyArray = {}
     
-    for i in range(0, len(text) - (k-1)):
-        key = text[i:i+k]
-        if key not in frequencyArray:
-            frequencyArray[key] = 1
-        else:
+    for i in range(0, len(genome) - (k-1)):
+        key = genome[i:i+k]
+        if key in frequencyArray:
             frequencyArray[key] += 1
+        else:
+            frequencyArray[key] = 1
             
     return frequencyArray
     
-def FasterFrequentWords(text, k):
+# Return the maximum frequence occurance of k-mers in genome
+def FasterFrequentWords(genome, k):
     frequentPatterns = set()
-    frequencyArray = ComputingFrequencies(text, k)
+    frequencyArray = ComputingFrequencies(genome, k)
     maxCount = max(frequencyArray.values())
     
     for key in frequencyArray:
@@ -215,6 +169,7 @@ def FasterFrequentWords(text, k):
             
     return frequentPatterns
     
+# Find all k-mer appearence >= t in genome of length L
 def BetterClumpFinding(genome, k, L, t):
     clumps = set()
     # print(k, t, L)
@@ -236,18 +191,53 @@ def BetterClumpFinding(genome, k, L, t):
         else:
             frequencyMap[nextPattern] = 1
             
-            
         # print(i-1,i-1+k,prevPattern, i+L-k,i+L,nextPattern)
         if frequencyMap[nextPattern] >= t:
             clumps.add(nextPattern)
             
-    
     return clumps
+
+
+# %%    
+genome = np.loadtxt('dataset_2_7.txt', dtype='str');
+print('Pattern Count: ' + str(PatternCount(genome[0], genome[1])))
+
+# %%
+genome = np.loadtxt('dataset_2_10.txt', dtype='str');
+print('Frequent Words: ', end='')
+print(FrequentWords(genome[0], int(genome[1])))
+
+    
+# %%
+
+g = np.loadtxt('dataset_3_2.txt', dtype='str', ndmin=1)
+print('Reverse Complement: ', end='')
+print(ReverseComplement(g[0]))
+
+# %%
+
+g = np.loadtxt('dataset_3_5.txt', dtype='str')
+print('Pattern Matching: ', end='')
+for i in PatternMatching(g[0], g[1]):
+    print(i, '', end='')
+    
+# %%
+    
+vibrio_cholerae = np.loadtxt('Vibrio_cholerae.txt', dtype='str', ndmin=1)
+for i in PatternMatching('CTTGATCAT', vibrio_cholerae[0]):
+    print(i, '', end='')
+    
+
+# %%
+data = np.loadtxt('dataset_4_5.txt', dtype='str', delimiter='\n ')
+param = [int(s) for s in data[1].split(' ')]
+print('Clump Finding: ', end='')
+for val in ClumpFinding(data[0], param[0], param[1], param[2]):
+    print(val, '', end='')
+
 
 # %%
     
 ecoli = np.loadtxt('E_coli.txt',  dtype='str', ndmin=1)
-for val in BetterClumpFinding(ecoli[0], 9, 500, 3):
-    print(' ', val, end='')
-    
+print(len(BetterClumpFinding(ecoli[0], 9, 500, 3)))
     
