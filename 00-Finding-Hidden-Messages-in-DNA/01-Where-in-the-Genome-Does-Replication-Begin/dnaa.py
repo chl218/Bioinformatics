@@ -241,3 +241,83 @@ for val in ClumpFinding(data[0], param[0], param[1], param[2]):
 ecoli = np.loadtxt('E_coli.txt',  dtype='str', ndmin=1)
 print(len(BetterClumpFinding(ecoli[0], 9, 500, 3)))
     
+
+# %%
+
+import numpy as np
+
+def Skew(genome):
+    difference = 0
+    skewArray = [0]
+    
+    for c in genome:
+        if c == 'G':
+            difference += 1
+            skewArray.append(difference)
+        elif c == 'C':
+            difference -= 1
+            skewArray.append(difference)
+        else:
+            skewArray.append(difference)
+            
+    return skewArray
+
+    
+def MinSkew(genome):
+    skewArr = np.array(Skew(genome))
+    return np.where(skewArr==skewArr.min())[0]
+
+
+def HammingDistance(p, q):
+    if(len(p) != len(q)):
+        return float('inf')
+    
+    count = 0;
+    for c1, c2 in zip(p, q):
+        if c1 != c2:
+            count += 1
+            
+    return count
+
+
+def ApproxPatternMatching(pattern, genome, distance):
+    idx = []
+    map = {}
+    cnt = 0
+    for i in range(0, len(genome) - len(pattern) + 1):
+        q = genome[i:i+len(pattern)]
+        if q in map and map[q] <= distance:
+            idx.append(i)
+            cnt += 1
+        else:
+            map[q] = HammingDistance(pattern, q)
+            if map[q] <= distance:
+                idx.append(i)
+                cnt += 1
+                
+    return idx, cnt
+
+
+
+# %%
+    
+genome = np.loadtxt('dataset_7_6.txt', dtype='str', ndmin=1)
+print(MinSkew(genome[0]))
+
+# %%
+
+genomes = np.loadtxt('dataset_9_3.txt', dtype='str')
+HammingDistance(genomes[0], genomes[1])
+
+# %%
+ApproxPatternMatching('ATTCTGGA','CGCCCGAATCCAGAACGCATTCCCATATTTCGGGACCACTGGCCTCCACGGTACGGACGTCAATCAAAT',3)
+
+
+data = np.loadtxt('dataset_9_4.txt', dtype='str')
+for i in ApproxPatternMatching(data[0], data[1], int(data[2])):
+    print(i, end=' ')
+
+# %%
+data = np.loadtxt('dataset_9_6.txt', dtype='str')
+_, cnt = ApproxPatternMatching(data[0],data[1],int(data[2]))
+cnt
