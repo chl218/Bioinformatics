@@ -313,6 +313,31 @@ def Neighbors(pattern, d):
             
     return neighbors
 
+def ApproxFrequencies(genome, k, d):
+    frequencyArray = {}
+    
+    for i in range(0, len(genome) - k + 1):
+        p = genome[i:i+k]
+        neighbors = Neighbors(p, d)
+        for neighbor in neighbors:
+            if neighbor in frequencyArray:
+                frequencyArray[neighbor] += 1
+            else:
+                frequencyArray[neighbor] = 1
+        
+    return frequencyArray
+        
+def ApproxFrequentWords(genome, k, d):
+    frequentPatterns = set()
+    frequencyArray = ApproxFrequencies(genome, k, d)
+    maxCount = max(frequencyArray.values())
+    
+    for key in frequencyArray:
+        if frequencyArray[key] == maxCount:
+            frequentPatterns.add(key)
+            
+    return frequentPatterns
+
 # %%
     
 genome = np.loadtxt('dataset_7_6.txt', dtype='str', ndmin=1)
@@ -341,3 +366,8 @@ cnt
 data = np.loadtxt('dataset_3014_4.txt', dtype='str')
 for permutation in Neighbors(data[0], int(data[1])):
     print(permutation)
+    
+# %%
+
+data = np.loadtxt('dataset_9_7.txt', dtype='str')
+ApproxFrequentWords(data[0], int(data[1]), int(data[2]))
