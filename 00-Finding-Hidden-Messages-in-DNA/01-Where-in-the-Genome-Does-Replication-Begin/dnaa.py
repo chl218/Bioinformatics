@@ -279,7 +279,6 @@ def HammingDistance(p, q):
             
     return count
 
-
 def ApproxPatternMatching(pattern, genome, distance):
     idx = []
     map = {}
@@ -298,6 +297,21 @@ def ApproxPatternMatching(pattern, genome, distance):
     return idx, cnt
 
 
+def Neighbors(pattern, d):
+    if d == 0:
+        return [pattern]
+    if len(pattern) == 1:
+        return ['A','C','G','T']
+    
+    neighbors = set()
+    for substr in Neighbors(pattern[1:], d):
+        if HammingDistance(pattern[1:], substr)  < d:
+            for nucleotide  in ['A','C','G','T']:
+                neighbors.add(nucleotide + substr)
+        else:
+            neighbors.add(pattern[0] + substr)
+            
+    return neighbors
 
 # %%
     
@@ -321,3 +335,9 @@ for i in ApproxPatternMatching(data[0], data[1], int(data[2])):
 data = np.loadtxt('dataset_9_6.txt', dtype='str')
 _, cnt = ApproxPatternMatching(data[0],data[1],int(data[2]))
 cnt
+
+# %%
+
+data = np.loadtxt('dataset_3014_4.txt', dtype='str')
+for permutation in Neighbors(data[0], int(data[1])):
+    print(permutation)
