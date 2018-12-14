@@ -244,8 +244,6 @@ print(len(BetterClumpFinding(ecoli[0], 9, 500, 3)))
 
 # %%
 
-import numpy as np
-
 def Skew(genome):
     difference = 0
     skewArray = [0]
@@ -279,6 +277,7 @@ def HammingDistance(p, q):
             
     return count
 
+
 def ApproxPatternMatching(pattern, genome, distance):
     idx = []
     map = {}
@@ -295,7 +294,6 @@ def ApproxPatternMatching(pattern, genome, distance):
                 cnt += 1
                 
     return idx, cnt
-
 
 def Neighbors(pattern, d):
     if d == 0:
@@ -326,6 +324,7 @@ def ApproxFrequencies(genome, k, d):
                 frequencyArray[neighbor] = 1
         
     return frequencyArray
+
         
 def ApproxFrequentWords(genome, k, d):
     frequentPatterns = set()
@@ -338,6 +337,38 @@ def ApproxFrequentWords(genome, k, d):
             
     return frequentPatterns
 
+
+def ApproxFrequentWordWithReverseComplement(genome, k, d):
+    
+    freqPattern = set()
+    
+    freqArr = ApproxFrequencies(genome, k, d)    
+    maxCount = max(freqArr.values())
+    
+    print(maxCount)
+    
+    for key in freqArr:
+        if freqArr[key] == maxCount:
+            freqPattern.add(key)
+        
+    sumFreqPattern = {}
+    for key in freqPattern:
+        rev_key = ReverseComplement(key)
+        _, cnt = ApproxPatternMatching(rev_key, genome, d);
+        sumFreqPattern[(key, rev_key)] = cnt + freqArr[key]
+        
+    maxSum = max(sumFreqPattern.value())
+    freqPattern = set()
+    for key in sumFreqPattern:
+        if sumFreqPattern[key] == maxSum:
+            freqPattern.add(key[0])
+            freqPattern.add(key[1])
+            
+    return freqPattern
+    
+    
+        
+ApproxFrequentWordWithReverseComplement('ACGTTGCATGTCGCATGATGCATGAGAGCT', 4, 1)
 # %%
     
 genome = np.loadtxt('dataset_7_6.txt', dtype='str', ndmin=1)
