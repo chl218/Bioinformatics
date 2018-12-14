@@ -342,33 +342,40 @@ def ApproxFrequentWordWithReverseComplement(genome, k, d):
     
     freqPattern = set()
     
-    freqArr = ApproxFrequencies(genome, k, d)    
-    maxCount = max(freqArr.values())
+    freqArr = ApproxFrequencies(genome, k, d)
     
-    print(maxCount)
+    sumFreqArr = {}
+    for p in freqArr:
+        pp = ReverseComplement(p)
+        
+        if (p, pp) not in sumFreqArr and (pp, p) not in sumFreqArr:
+            _, count = ApproxPatternMatching(pp, genome, d)
+            sumFreqArr[(p, pp)] = freqArr[p] + count
+
+    maxCount = max(sumFreqArr.values())
     
-    for key in freqArr:
-        if freqArr[key] == maxCount:
-            freqPattern.add(key)
+    for p in sumFreqArr:
+        if sumFreqArr[p] == maxCount:
+            freqPattern.add(p[0])
+            freqPattern.add(p[1])
         
-    sumFreqPattern = {}
-    for key in freqPattern:
-        rev_key = ReverseComplement(key)
-        _, cnt = ApproxPatternMatching(rev_key, genome, d);
-        sumFreqPattern[(key, rev_key)] = cnt + freqArr[key]
-        
-    maxSum = max(sumFreqPattern.value())
-    freqPattern = set()
-    for key in sumFreqPattern:
-        if sumFreqPattern[key] == maxSum:
-            freqPattern.add(key[0])
-            freqPattern.add(key[1])
-            
     return freqPattern
+            
+
     
+data = np.loadtxt('dataset_9_8.txt', dtype='str')
+for g in ApproxFrequentWordWithReverseComplement(data[0], int(data[1]), int(data[2])):
+    print(g, end=' ')
     
-        
-ApproxFrequentWordWithReverseComplement('ACGTTGCATGTCGCATGATGCATGAGAGCT', 4, 1)
+#print(ApproxFrequentWordWithReverseComplement('ACGTTGCATGTCGCATGATGCATGAGAGCT',4,1))
+#print(ApproxFrequentWordWithReverseComplement('AAAAAAAAAA',2,1))
+#print(ApproxFrequentWordWithReverseComplement('AGTCAGTC',4,2))
+#print(ApproxFrequentWordWithReverseComplement('AATTAATTGGTAGGTAGGTA',4,0))
+#print(ApproxFrequentWordWithReverseComplement('ATA',3,1))
+#print(ApproxFrequentWordWithReverseComplement('AAT',3,0))
+#print(ApproxFrequentWordWithReverseComplement('TAGCG',2,1))
+
+
 # %%
     
 genome = np.loadtxt('dataset_7_6.txt', dtype='str', ndmin=1)
