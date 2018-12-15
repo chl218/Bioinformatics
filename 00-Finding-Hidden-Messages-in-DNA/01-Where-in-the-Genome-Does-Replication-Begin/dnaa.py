@@ -261,24 +261,20 @@ def Skew(genome):
     return skewArray
 
     
-def MinSkew(genome):
+def MinimumSkew(genome):
     skewArr = np.array(Skew(genome))
     return np.where(skewArr==skewArr.min())[0]
 
 
 def HammingDistance(p, q):
-    if(len(p) != len(q)):
-        return float('inf')
-    
     count = 0;
     for c1, c2 in zip(p, q):
         if c1 != c2:
             count += 1
-            
     return count
 
 
-def ApproxPatternMatching(pattern, genome, distance):
+def ApproximatePatternMatching(pattern, genome, distance):
     idx = []
     map = {}
     cnt = 0
@@ -294,6 +290,37 @@ def ApproxPatternMatching(pattern, genome, distance):
                 cnt += 1
                 
     return idx, cnt
+
+
+print(ApproximatePatternMatching('CCA', 'CCACCT',  0))
+
+def ApproximatePatternMatching2(Text, Pattern, d):
+    positions = [] # initializing list of positions
+    for i in range(len(Text) - len(Pattern)+1):
+        if HammingDistance(Text[i:i+len(Pattern)], Pattern) <= d:
+            positions.append(i)
+    return positions
+
+print(ApproximatePatternMatching2('CCACCT','CCA',  0))
+
+
+
+
+
+
+def ApproximatePatternCount(text, pattern, d):
+    map = {}
+    count = 0
+    for i in range(0, len(text) - len(pattern) + 1):
+        q = text[i:i+len(pattern)]
+        if q in map and map[q] <= d:
+            count += 1
+        else:
+            map[q] = HammingDistance(pattern, q)
+            if map[q] <= d:
+                count += 1
+    return count
+
 
 def Neighbors(pattern, d):
     if d == 0:
@@ -326,9 +353,9 @@ def ApproxFrequencies(genome, k, d):
     return frequencyArray
 
         
-def ApproxFrequentWords(genome, k, d):
+def FrequentWordsWithMismatches(text, k, d):
     frequentPatterns = set()
-    frequencyArray = ApproxFrequencies(genome, k, d)
+    frequencyArray = ApproxFrequencies(text, k, d)
     maxCount = max(frequencyArray.values())
     
     for key in frequencyArray:
@@ -338,18 +365,18 @@ def ApproxFrequentWords(genome, k, d):
     return frequentPatterns
 
 
-def ApproxFrequentWordWithReverseComplement(genome, k, d):
+def FrequentWordsWithMismatchesAndReverseComplements(text, k, d):
     
     freqPattern = set()
     
-    freqArr = ApproxFrequencies(genome, k, d)
+    freqArr = ApproxFrequencies(text, k, d)
     
     sumFreqArr = {}
     for p in freqArr:
         pp = ReverseComplement(p)
         
         if (p, pp) not in sumFreqArr and (pp, p) not in sumFreqArr:
-            _, count = ApproxPatternMatching(pp, genome, d)
+            _, count = ApproximatePatternMatching(pp, text, d)
             sumFreqArr[(p, pp)] = freqArr[p] + count
 
     maxCount = max(sumFreqArr.values())
@@ -364,7 +391,7 @@ def ApproxFrequentWordWithReverseComplement(genome, k, d):
 
     
 data = np.loadtxt('dataset_9_8.txt', dtype='str')
-for g in ApproxFrequentWordWithReverseComplement(data[0], int(data[1]), int(data[2])):
+for g in FrequentWordsWithMismatchesAndReverseComplements(data[0], int(data[1]), int(data[2])):
     print(g, end=' ')
     
 #print(ApproxFrequentWordWithReverseComplement('ACGTTGCATGTCGCATGATGCATGAGAGCT',4,1))
