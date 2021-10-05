@@ -1,6 +1,4 @@
 import unittest
-import logging
-import os
 import numpy as np
 from src.tba import tba
 
@@ -11,10 +9,6 @@ class TestTba(unittest.TestCase):
 
         self.uut = tba()
         self.dataPath = "01-Finding-Hidden-Messages-in-DNA/data"
-        self.log = logging.getLogger("Test Log")
-
-
-
 
     def test_pattern_count(self):
 
