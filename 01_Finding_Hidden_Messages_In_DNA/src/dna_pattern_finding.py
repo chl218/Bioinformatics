@@ -10,7 +10,6 @@ class DNAPatternFinding:
     def __init__(self) -> None:
         pass
 
-
     def pattern_count(self, text: str, pattern: str) -> int:
         """ Pattern Count
 
@@ -24,7 +23,6 @@ class DNAPatternFinding:
                 count += 1
 
         return count
-
 
     def frequent_words(self, text: str, k: int) -> List[str]:
         """ Frequent Words
@@ -46,7 +44,6 @@ class DNAPatternFinding:
 
         return list(frequent_patterns)
 
-
     def frequency_table(self, text: str, k: int) -> Dict[str, int]:
         """ Frequency Table
 
@@ -65,7 +62,6 @@ class DNAPatternFinding:
                 freq_map[pattern] = 1
 
         return freq_map
-
 
     def better_frequent_words(self, text: str, k: int) -> List[str]:
         """ Frequent Words (Optimized)

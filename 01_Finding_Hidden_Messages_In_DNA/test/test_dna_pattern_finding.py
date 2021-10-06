@@ -11,7 +11,6 @@ class TestDNAPatternFinding(unittest.TestCase):
         self.uut = DNAPatternFinding()
         self.dataPath = "01_Finding_Hidden_Messages_In_DNA/data"
 
-
     def read_data(self, file_path: str, read_type: str, file_count: int) -> list:
         data = []
         for i in range(1, file_count):
@@ -21,7 +20,6 @@ class TestDNAPatternFinding(unittest.TestCase):
             else:
                 data.append(res.tolist())
         return data
-
 
     def test_pattern_count(self):
 
@@ -33,7 +31,6 @@ class TestDNAPatternFinding(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
-
     def test_frequent_words(self):
 
         inputs = self.read_data(self.dataPath+"/frequent_words_inputs/input_", "str", 7)
@@ -44,7 +41,6 @@ class TestDNAPatternFinding(unittest.TestCase):
 
         for a1, a2 in zip(expected, actual):
             self.assertCountEqual(a1, a2)
-
 
     def test_better_frequent_words(self):
 
