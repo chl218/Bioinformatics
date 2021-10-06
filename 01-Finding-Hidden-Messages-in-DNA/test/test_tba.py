@@ -1,13 +1,13 @@
 import unittest
 import numpy as np
-from src.tba import tba
+from src.tba import TBA
 
-class TestTba(unittest.TestCase):
+class TestTBA(unittest.TestCase):
 
     def __init__(self, methodName: str = ...) -> None:
         super().__init__(methodName=methodName)
 
-        self.uut = tba()
+        self.uut = TBA()
         self.dataPath = "01-Finding-Hidden-Messages-in-DNA/data"
 
     def test_pattern_count(self):
