@@ -2,7 +2,7 @@
    "python.testing.unittestArgs": [
       "-v",
       "-s",
-      "./01-Finding-Hidden-Messages-in-DNA",
+      "./01_Finding_Hidden_Messages_In_DNA",
       "-p",
       "test_*.py"
    ],
