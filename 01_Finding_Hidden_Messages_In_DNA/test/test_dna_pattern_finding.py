@@ -53,6 +53,25 @@ class TestDNAPatternFinding(unittest.TestCase):
         for a1, a2 in zip(expected, actual):
             self.assertCountEqual(a1, a2)
 
+    def test_reverse_complement(self):
+        inputs = self.read_data(self.dataPath+"/reverse_complement_inputs/input_", "str", 3)
+        expected = self.read_data(self.dataPath+"/reverse_complement_outputs/output_", "str", 3)
+        actual = []
+        for input in inputs:
+            actual.append([self.uut.reverse_complement(input[0])])
+
+        self.assertEqual(expected, actual)
+
+    def test_pattern_match(self):
+        inputs = self.read_data(self.dataPath+"/pattern_matching_inputs/input_", "str", 6)
+        expected = self.read_data(self.dataPath+"/pattern_matching_outputs/output_", "int", 6)
+
+        actual = []
+        for input in inputs:
+            actual.append(self.uut.pattern_match(input[0], input[1]))
+
+        self.assertEqual(expected, actual)
+
 
 if __name__ == '__main__':
     unittest.main()

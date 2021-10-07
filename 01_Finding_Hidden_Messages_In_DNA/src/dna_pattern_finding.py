@@ -94,7 +94,6 @@ class DNAPatternFinding:
 
         return ''.join(rc)
 
-
     def pattern_match(self, pattern: str, genome: str) -> List[int]:
         idx = []
 
