@@ -95,3 +95,13 @@ class DNAPatternFinding:
         return ''.join(rc)
 
 
+    def pattern_match(self, pattern: str, genome: str) -> List[int]:
+        idx = []
+
+        n = len(genome) - len(pattern) + 1
+        k = len(pattern)
+        for i in range(0, n):
+            if genome[i:i+k] == pattern:
+                idx.append(i)
+
+        return idx
