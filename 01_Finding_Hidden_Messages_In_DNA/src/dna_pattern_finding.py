@@ -78,3 +78,20 @@ class DNAPatternFinding:
                 frequent_patterns.append(k)
 
         return frequent_patterns
+
+    def reverse_complement(self, pattern: str) -> str:
+
+        rc = []
+        for s in reversed(pattern):
+            if s == "A":
+                rc.append("T")
+            elif s == "T":
+                rc.append("A")
+            elif s == "G":
+                rc.append("C")
+            elif s == "C":
+                rc.append("G")
+
+        return ''.join(rc)
+
+
