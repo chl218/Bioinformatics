@@ -65,12 +65,20 @@ class TestDNAPatternFinding(unittest.TestCase):
     def test_pattern_match(self):
         inputs = self.read_data(self.dataPath+"/pattern_matching_inputs/input_", "str", 6)
         expected = self.read_data(self.dataPath+"/pattern_matching_outputs/output_", "int", 6)
-
         actual = []
         for input in inputs:
             actual.append(self.uut.pattern_match(input[0], input[1]))
 
         self.assertEqual(expected, actual)
+
+        expected1 = "60039 98409 129189 152283 152354 152411 163207 197028 200160 357976 376771 392723 532935 600085 622755 1065555"
+        expected2 = "116556 149355 151913 152013 152394 186189 194276 200076 224527 307692 479770 610980 653338 679985 768828 878903 985368"
+        p1 = "CTTGATCAT"
+        p2 = "ATGATCAAG"
+        genome = np.loadtxt(self.dataPath+"/Vibrio_cholerae.txt", dtype="str").tolist()
+
+        self.assertEqual(' '.join(map(str, self.uut.pattern_match(p1, genome))), expected1)
+        self.assertEqual(' '.join(map(str, self.uut.pattern_match(p2, genome))), expected2)
 
 
 if __name__ == '__main__':

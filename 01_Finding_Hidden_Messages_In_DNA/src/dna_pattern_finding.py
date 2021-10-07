@@ -1,6 +1,5 @@
 
-from typing import Dict, List, Set
-
+from typing import Dict, List
 
 class DNAPatternFinding:
 
@@ -80,7 +79,10 @@ class DNAPatternFinding:
         return frequent_patterns
 
     def reverse_complement(self, pattern: str) -> str:
+        """Reverse Complement
 
+        Find the reverse complement of a DNA string
+        """
         rc = []
         for s in reversed(pattern):
             if s == "A":
@@ -95,7 +97,13 @@ class DNAPatternFinding:
         return ''.join(rc)
 
     def pattern_match(self, pattern: str, genome: str) -> List[int]:
+        """Pattern Matching
+
+        Find a collection of space-separated integers specifying all starting
+        positions where pattern appears as a substring of genome.
+        """
         idx = []
+
 
         n = len(genome) - len(pattern) + 1
         k = len(pattern)
