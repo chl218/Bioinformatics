@@ -13,7 +13,7 @@ class TestDNAPatternFinding(unittest.TestCase):
 
     def read_data(self, file_path: str, read_type: str, file_count: int) -> list:
         data = []
-        for i in range(1, file_count):
+        for i in range(1, file_count+1):
             res = np.loadtxt(file_path+str(i)+".txt", dtype=read_type)
             if res.size == 1:
                 data.append([res.tolist()])
@@ -23,8 +23,8 @@ class TestDNAPatternFinding(unittest.TestCase):
 
     def test_pattern_count(self):
 
-        inputs = self.read_data(self.dataPath+"/pattern_count_inputs/input_", "str", 9)
-        expected = self.read_data(self.dataPath+"/pattern_count_outputs/output_", "int", 9)
+        inputs = self.read_data(self.dataPath+"/pattern_count_inputs/input_", "str", 8)
+        expected = self.read_data(self.dataPath+"/pattern_count_outputs/output_", "int", 8)
         actual = []
         for input in inputs:
             actual.append([self.uut.pattern_count(input[0], input[1])])
@@ -79,6 +79,17 @@ class TestDNAPatternFinding(unittest.TestCase):
 
         self.assertEqual(' '.join(map(str, self.uut.pattern_match(p1, genome))), expected1)
         self.assertEqual(' '.join(map(str, self.uut.pattern_match(p2, genome))), expected2)
+
+    def test_find_clump(self):
+        inputs = self.read_data(self.dataPath+"/clump_finding_inputs/input_", "str", 6)
+        expected = self.read_data(self.dataPath+"/clump_finding_outputs/output_", "str", 6)
+        actual = []
+        for input in inputs:
+            actual.append(self.uut.find_clumps(input[0], int(input[1]), int(input[2]), int(input[3])))
+
+        for a1, a2 in zip(expected, actual):
+            print(a1, a2)
+            self.assertCountEqual(a1, a2)
 
 
 if __name__ == '__main__':

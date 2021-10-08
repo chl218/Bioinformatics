@@ -1,6 +1,7 @@
 
 from typing import Dict, List
 
+
 class DNAPatternFinding:
 
     """ Finding Hidden Messages in DNA
@@ -46,8 +47,7 @@ class DNAPatternFinding:
     def frequency_table(self, text: str, k: int) -> Dict[str, int]:
         """ Frequency Table
 
-        Takes a string text and an integer k as input and returns their frequency
-        table as a map of string keys to integer values.
+        Find the frequency of k-mers in text
         """
 
         freq_map = {}
@@ -99,11 +99,10 @@ class DNAPatternFinding:
     def pattern_match(self, pattern: str, genome: str) -> List[int]:
         """Pattern Matching
 
-        Find a collection of space-separated integers specifying all starting
-        positions where pattern appears as a substring of genome.
+        Returns a list of integers specifying all starting positions where
+        pattern appears as a substring of genome.
         """
         idx = []
-
 
         n = len(genome) - len(pattern) + 1
         k = len(pattern)
@@ -122,7 +121,6 @@ class DNAPatternFinding:
         """
 
         patterns = set()
-
         n = len(text) - L + 1
 
         for i in range(0, n):
@@ -134,4 +132,3 @@ class DNAPatternFinding:
                     patterns.add(key)
 
         return list(patterns)
-
