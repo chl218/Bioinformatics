@@ -51,9 +51,9 @@ class DNAPatternFinding:
         """
 
         freq_map = {}
-        n = len(text)
+        n = len(text) - k + 1
 
-        for i in range(0, n-k+1):
+        for i in range(0, n):
             pattern = text[i:i+k]
             if pattern in freq_map:
                 freq_map[pattern] += 1
@@ -112,3 +112,26 @@ class DNAPatternFinding:
                 idx.append(i)
 
         return idx
+
+    def find_clumps(self, text: str, k: int, L: int, t: int) -> List[str]:
+        """Find Clumps
+
+        Given integers L and t, a k-mer Pattern forms an (L, t)-clump inside a
+        string Genome if there is an interval of Genome of length L in which
+        this k-mer appears at least t times.
+        """
+
+        patterns = set()
+
+        n = len(text) - L + 1
+
+        for i in range(0, n):
+            window = text[i:i+L]
+            freq_map = self.frequency_table(window, k)
+
+            for key, val in freq_map.items():
+                if val >= t:
+                    patterns.add(key)
+
+        return list(patterns)
+
