@@ -1,0 +1,2 @@
+class GenomeReplicationAlgorithm:
+    pass
