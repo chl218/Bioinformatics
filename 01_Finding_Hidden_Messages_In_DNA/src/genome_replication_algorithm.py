@@ -24,10 +24,12 @@ class GenomeReplicationAlgorithm:
 
         return skew
 
-
+    def skew_min(self, genome: str) -> List[int]:
+        skew = self.skew_GC(genome)
+        mmin = min(skew)
+        return [idx for idx, val in enumerate(skew) if val == mmin]
 
 
 uut = GenomeReplicationAlgorithm()
-g = "GAGCCACCGCGATA"
 
-print(' '.join(map(str, uut.skew_GC(g))))
+
