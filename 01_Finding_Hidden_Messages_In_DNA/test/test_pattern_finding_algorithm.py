@@ -2,6 +2,7 @@ import unittest
 import numpy as np
 from src.pattern_finding_algorithm import PatternFindingAlgorithm
 
+
 class TestPatternFindingAlgorithm(unittest.TestCase):
 
     def __init__(self, methodName: str = ...) -> None:
@@ -87,9 +88,7 @@ class TestPatternFindingAlgorithm(unittest.TestCase):
             actual.append(self.uut.find_clumps(input[0], int(input[1]), int(input[2]), int(input[3])))
 
         for a1, a2 in zip(expected, actual):
-            print(a1, a2)
             self.assertCountEqual(a1, a2)
-
 
 
 if __name__ == '__main__':

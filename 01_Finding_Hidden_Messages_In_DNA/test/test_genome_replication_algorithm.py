@@ -20,3 +20,16 @@ class TestGenomeReplicationAlgorithm(unittest.TestCase):
             else:
                 data.append(res.tolist())
         return data
+
+    def test_skew_min(self):
+        inputs = self.read_data(self.dataPath+"/minimum_skew_inputs/input_", "str", 6)
+        expected = self.read_data(self.dataPath+"/minimum_skew_outputs/output_", "int", 6)
+        actual = []
+        for input in inputs:
+            actual.append(self.uut.skew_min(input[0]))
+
+        self.assertEqual(expected, actual)
+
+
+if __name__ == '__main__':
+    unittest.main()
