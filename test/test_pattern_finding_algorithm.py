@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from src.pattern_finding_algorithm import PatternFindingAlgorithm
+from src.01_Finding_Hidden_Messages_In_DNA.pattern_finding_algorithm import PatternFindingAlgorithm
 
 
 class TestPatternFindingAlgorithm(unittest.TestCase):

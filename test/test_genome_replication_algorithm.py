@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from src.genome_replication_algorithm import GenomeReplicationAlgorithm
+from src.01_Finding_Hidden_Messages_In_DNA.genome_replication_algorithm import GenomeReplicationAlgorithm
 
 
 class TestGenomeReplicationAlgorithm(unittest.TestCase):
