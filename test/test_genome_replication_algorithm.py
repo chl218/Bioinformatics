@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from src.01_Finding_Hidden_Messages_In_DNA.genome_replication_algorithm import GenomeReplicationAlgorithm
+from src.finding_hidden_messages_in_dna.genome_replication_algorithm import GenomeReplicationAlgorithm
 
 
 class TestGenomeReplicationAlgorithm(unittest.TestCase):
@@ -9,7 +9,7 @@ class TestGenomeReplicationAlgorithm(unittest.TestCase):
         super().__init__(methodName=methodName)
 
         self.uut = GenomeReplicationAlgorithm()
-        self.dataPath = "01_Finding_Hidden_Messages_In_DNA/data"
+        self.dataPath = "data"
 
     def read_data(self, file_path: str, read_type: str, file_count: int) -> list:
         data = []
