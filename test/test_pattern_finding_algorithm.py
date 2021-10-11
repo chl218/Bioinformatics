@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from src.finding_hidden_messages_in_dna.pattern_finding_algorithm import PatternFindingAlgorithm
+from src.replication.pattern_finding_algorithm import PatternFindingAlgorithm
 
 
 class TestPatternFindingAlgorithm(unittest.TestCase):
@@ -9,7 +9,7 @@ class TestPatternFindingAlgorithm(unittest.TestCase):
         super().__init__(methodName=methodName)
 
         self.uut = PatternFindingAlgorithm()
-        self.dataPath = "data"
+        self.dataPath = "data/replication"
 
     def read_data(self, file_path: str, read_type: str, file_count: int) -> list:
         data = []
