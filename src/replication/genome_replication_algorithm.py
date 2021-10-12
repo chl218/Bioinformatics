@@ -85,5 +85,29 @@ class GenomeReplicationAlgorithm:
 
         return counts
 
+    def neighbors(self, pattern: str, d: int) -> List[str]:
+        print(pattern)
+        if d == 0:
+            return [pattern]
+        if len(pattern) == 1:
+            return ['A', 'C', 'G', 'T']
+
+        neighbor = set()
+        suffix_pattern = pattern[1:]
+        suffix_neighbors = self.neighbors(suffix_pattern, d)
+        for sn in suffix_neighbors:
+            if self.hamming_distance(suffix_pattern, sn) < d:
+                neighbor.add('A' + sn)
+                neighbor.add('C' + sn)
+                neighbor.add('G' + sn)
+                neighbor.add('T' + sn)
+            else:
+                neighbor.add(pattern[0] + sn)
+
+        return neighbor
 
 uut = GenomeReplicationAlgorithm()
+
+p = "GCATTTAC"
+d = 2
+print(' '.join(uut.neighbors(p, d)))
