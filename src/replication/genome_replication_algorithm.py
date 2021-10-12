@@ -1,10 +1,6 @@
 from typing import List
-from pathlib import Path
-import sys
-path_root = Path(__file__).parents[2]
-sys.path.append(str(path_root))
-print(sys.path)
 from src.replication.pattern_finding_algorithm import PatternFindingAlgorithm
+
 
 class GenomeReplicationAlgorithm:
 
@@ -91,6 +87,11 @@ class GenomeReplicationAlgorithm:
         return counts
 
     def neighbors(self, pattern: str, d: int) -> List[str]:
+        """ Neighbors
+
+        Generate d-neighborhood of all k-mers whose Hamming distance from
+        pattern does not exceed d
+        """
         if d == 0:
             return [pattern]
         if len(pattern) == 1:
@@ -111,6 +112,10 @@ class GenomeReplicationAlgorithm:
         return list(neighbor)
 
     def frequent_words_with_mismatches(self, text: str, k: int, d: int) -> List[str]:
+        """ Most Frequent Words with Mismatch
+
+        A most frequent k-mer with up to d mismatches
+        """
         freq_map = {}
 
         n = len(text) - k + 1
@@ -131,7 +136,11 @@ class GenomeReplicationAlgorithm:
 
         return most_freq
 
-    def frequent_words_with_mismatches_with_reverse_complement(self, text: str, k: int, d: int) -> List[str]:
+    def frequent_words_with_mismatches_and_reverse_complement(self, text: str, k: int, d: int) -> List[str]:
+        """ Most Frequent Words with Mismatch and Reverse Complement
+
+        Find the most frequent k-mers (with mismatches and reverse complements) in a string.
+        """
         freq_map = {}
 
         n = len(text) - k + 1
