@@ -124,7 +124,6 @@ class PatternFindingAlgorithm:
         n = len(text) - L + 1
         nn = len(text)
         for i in range(0, n):
-            print("%.3f" % (i/nn))
             window = text[i:i+L]
             freq_map = self.frequency_table(window, k)
 
@@ -133,3 +132,5 @@ class PatternFindingAlgorithm:
                     patterns.add(key)
 
         return list(patterns)
+
+

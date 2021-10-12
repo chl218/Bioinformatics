@@ -1,10 +1,15 @@
 from typing import List
-
+from pathlib import Path
+import sys
+path_root = Path(__file__).parents[2]
+sys.path.append(str(path_root))
+print(sys.path)
+from src.replication.pattern_finding_algorithm import PatternFindingAlgorithm
 
 class GenomeReplicationAlgorithm:
 
     def __init__(self) -> None:
-        pass
+        self.patternFinding = PatternFindingAlgorithm()
 
     def skew_GC(self, genome: str) -> List[int]:
         """Skew Diagram
@@ -86,7 +91,6 @@ class GenomeReplicationAlgorithm:
         return counts
 
     def neighbors(self, pattern: str, d: int) -> List[str]:
-        print(pattern)
         if d == 0:
             return [pattern]
         if len(pattern) == 1:
@@ -104,10 +108,48 @@ class GenomeReplicationAlgorithm:
             else:
                 neighbor.add(pattern[0] + sn)
 
-        return neighbor
+        return list(neighbor)
 
-uut = GenomeReplicationAlgorithm()
+    def frequent_words_with_mismatches(self, text: str, k: int, d: int) -> List[str]:
+        freq_map = {}
 
-p = "GCATTTAC"
-d = 2
-print(' '.join(uut.neighbors(p, d)))
+        n = len(text) - k + 1
+        for i in range(0, n):
+            pattern = text[i:i+k]
+            neighborhood = self.neighbors(pattern, d)
+            for neighbor in neighborhood:
+                if neighbor in freq_map:
+                    freq_map[neighbor] += 1
+                else:
+                    freq_map[neighbor] = 1
+
+        most_freq = []
+        max_freq = max(freq_map.values())
+        for k, v in freq_map.items():
+            if v == max_freq:
+                most_freq.append(k)
+
+        return most_freq
+
+    def frequent_words_with_mismatches_with_reverse_complement(self, text: str, k: int, d: int) -> List[str]:
+        freq_map = {}
+
+        n = len(text) - k + 1
+        for i in range(0, n):
+            pattern = text[i:i+k]
+            pattern_rc = self.patternFinding.reverse_complement(pattern)
+
+            neighborhood = self.neighbors(pattern, d) + self.neighbors(pattern_rc, d)
+            for neighbor in neighborhood:
+                if neighbor in freq_map:
+                    freq_map[neighbor] += 1
+                else:
+                    freq_map[neighbor] = 1
+
+        most_freq = []
+        max_freq = max(freq_map.values())
+        for k, v in freq_map.items():
+            if v == max_freq:
+                most_freq.append(k)
+
+        return most_freq
