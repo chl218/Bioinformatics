@@ -1,1 +1,3 @@
-AGGGT2 0
+AGGGT
+2
+0

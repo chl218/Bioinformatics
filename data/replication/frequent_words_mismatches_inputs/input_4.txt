@@ -1,1 +1,3 @@
-AGGCGG3 0
+AGGCGG
+3
+0

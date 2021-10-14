@@ -48,6 +48,27 @@ class TestGenomeReplicationAlgorithm(unittest.TestCase):
 
         self.assertEqual(expected, actual)
 
+    def test_frequent_words_with_mismatches(self):
+        inputs = self.read_data(self.dataPath+"/frequent_words_mismatches_inputs/input_", "str", 5)
+        expected = self.read_data(self.dataPath+"/frequent_words_mismatches_outputs/output_", "str", 5)
+        actual = []
+        for input in inputs:
+            actual.append(self.uut.frequent_words_with_mismatches(input[0], int(input[1]), int(input[2])))
+
+        for e1, a1 in zip(expected, actual):
+            self.assertCountEqual(e1, a1)
+
+    def test_frequent_words_with_mismatches_and_reverse_complement(self):
+        inputs = self.read_data(self.dataPath+"/frequent_words_mismatches_and_rc_inputs/input_", "str", 8)
+        expected = self.read_data(self.dataPath+"/frequent_words_mismatches_and_rc_outputs/output_", "str", 8)
+        actual = []
+        for input in inputs:
+            actual.append(self.uut.frequent_words_with_mismatches_and_reverse_complement(
+                input[0], int(input[1]), int(input[2])))
+
+        for e1, a1 in zip(expected, actual):
+            self.assertCountEqual(e1, a1)
+
 
 if __name__ == '__main__':
     unittest.main()
