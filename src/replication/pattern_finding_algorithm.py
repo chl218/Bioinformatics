@@ -132,5 +132,3 @@ class PatternFindingAlgorithm:
                     patterns.add(key)
 
         return list(patterns)
-
-

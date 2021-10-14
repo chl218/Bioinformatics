@@ -1,16 +1,5 @@
-
-from pathlib import Path
-import sys
-path_root = Path(__file__).parents[2]
-sys.path.append(str(path_root))
-print(sys.path)
-
 from typing import List
 from src.replication.pattern_finding_algorithm import PatternFindingAlgorithm
-
-
-
-import numpy as np
 
 
 class GenomeReplicationAlgorithm:
@@ -173,23 +162,3 @@ class GenomeReplicationAlgorithm:
                 most_freq.append(k)
 
         return most_freq
-
-
-
-
-# uut = GenomeReplicationAlgorithm()
-
-# genome = np.loadtxt("data/replication/Salmonella_enterica.txt", dtype="str").tolist()
-# print(len(genome))
-
-
-# minSkews = uut.skew_min(genome)
-
-
-# print("min skews: ", minSkews)
-
-# res = []
-# for minSkew in minSkews:
-#     res.append(uut.frequent_words_with_mismatches_and_reverse_complement(genome[minSkew-250:minSkew+250], 9, 1))
-
-# print("k-mers:", )
