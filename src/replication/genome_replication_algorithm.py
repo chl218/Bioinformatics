@@ -72,7 +72,7 @@ class GenomeReplicationAlgorithm:
         """ Approximate Pattern Count
 
         Given strings Text and Pattern as well as an integer d, count the total
-        number of occurrences of pattern in Ttext with at most d mismatches
+        number of occurrences of pattern in text with at most d mismatches
         """
 
         n = len(text) - len(pattern) + 1
