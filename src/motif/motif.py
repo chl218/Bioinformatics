@@ -10,7 +10,6 @@ from src.replication.genome_replication_algorithm import GenomeReplicationAlgori
 class MotifAlgorithm:
 
     def __init__(self) -> None:
-
         self.gra = GenomeReplicationAlgorithm()
 
     def motif_enumeration(self, dna_list: List[str], k: int, d: int) -> List[str]:
@@ -38,9 +37,3 @@ class MotifAlgorithm:
 
         return list(motifs)
 
-
-uut = MotifAlgorithm()
-g = "GCCGCCAAGTATTCTAACTAATCTT TTTCTCGCGTAAAATCGACTCGTTT GTTCTCCCGGCTATGGTTCGGGAAC TACGTTTCATCTTCTCCGATGTATA AGGGGCTTCTGGGACTGTCTACGCC ATTCTGTATGAGATCCTATCGGCGA".split(" ")
-k = 5
-d = 1
-print(' '.join(uut.motif_enumeration(g, k , d)))
