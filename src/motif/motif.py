@@ -54,12 +54,16 @@ class MotifAlgorithm:
 
         motifs_t = motifs.T
 
-        res = np.zeros(shape=(4, motifs.shape[1]))
-        for col in motifs_t:
+        res = np.zeros(shape=(motifs.shape[1], 4), dtype="int")
+
+
+        for idx, col in enumerate(motifs_t):
             counts = Counter({'A':0, 'C':0, 'G':0, 'T':0})
             counts.update(col)
+            res[idx] = [counts['A'], counts['C'], counts['G'], counts['T']]
 
 
+        return res.T
 
 
 uut = MotifAlgorithm()
