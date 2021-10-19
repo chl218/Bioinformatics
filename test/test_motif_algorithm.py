@@ -34,5 +34,6 @@ class TestMotifAlgorithm(unittest.TestCase):
             else:
                 self.assertCountEqual(e1[0].split(' '), a1)
 
+
 if __name__ == '__main__':
     unittest.main()

@@ -1,3 +1,4 @@
+from collections import Counter
 from pathlib import Path
 import sys
 path_root = Path(__file__).parents[2]
@@ -6,6 +7,7 @@ print(sys.path)
 
 from typing import List
 from src.replication.genome_replication_algorithm import GenomeReplicationAlgorithm
+import numpy as np
 
 class MotifAlgorithm:
 
@@ -37,3 +39,31 @@ class MotifAlgorithm:
 
         return list(motifs)
 
+    def score(self, motifs: np.ndarray) -> int:
+
+        total = motifs.shape[0]
+        motifs_t = motifs.T
+
+        score = 0
+        for col in motifs_t:
+            score += total - Counter(col).most_common(1)[0][1]
+
+        return score
+
+    def count(self, motifs: np.ndarray) -> np.ndarray:
+
+        motifs_t = motifs.T
+
+        res = np.zeros(shape=(4, motifs.shape[1]))
+        for col in motifs_t:
+            counts = Counter({'A':0, 'C':0, 'G':0, 'T':0})
+            counts.update(col)
+
+
+
+
+uut = MotifAlgorithm()
+data = np.loadtxt('data/replication/motifs.txt', dtype="str")
+print(data.shape[0])
+print(uut.score(data))
+print(uut.count(data))
