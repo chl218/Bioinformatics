@@ -34,6 +34,11 @@ class TestMotifAlgorithm(unittest.TestCase):
             else:
                 self.assertCountEqual(e1[0].split(' '), a1)
 
+    def test_distance_between_pattern_and_strings(self):
+        pass
+
+    def test_median_string(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()
