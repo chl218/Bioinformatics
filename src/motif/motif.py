@@ -118,6 +118,10 @@ class MotifAlgorithm:
         return total_entropy
 
     def distance_between_pattern_and_strings(self, pattern: str, dna: List[str]) -> int:
+        """d(pattern, dna)
+
+        The sum of distances between Pattern and each string in Dna = {Dna1, ..., Dnat}
+        """
         k = len(pattern)
         min_distance = 0
 
@@ -132,6 +136,14 @@ class MotifAlgorithm:
         return min_distance
 
     def median_string(self, dna: str, k: int) -> List[str]:
+        """Median String
+
+
+        Input:  An integer k, followed by a space-separated collection of
+                strings Dna.
+        Output: A k-mer Pattern that minimizes d(Pattern, Dna) among all possible
+                choices of k-mers.
+        """
         distance = sys.maxsize
         patterns = self.gra.neighbors("A"*k, k)
         median = []
@@ -144,11 +156,3 @@ class MotifAlgorithm:
         return median
 
 
-def read(path):
-    with open(path) as f:
-        return f.read().splitlines()
-
-uut = MotifAlgorithm()
-
-input = read("data/replication/median_string_inputs/input_4.txt")
-print(uut.median_string(input[1].split(' '), int(input[0])))
