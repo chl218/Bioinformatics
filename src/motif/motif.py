@@ -42,32 +42,31 @@ class MotifAlgorithm:
     def score(self, motifs: np.ndarray) -> int:
 
         total = motifs.shape[0]
-        motifs_t = motifs.T
 
         score = 0
-        for col in motifs_t:
+        for col in motifs.T:
             score += total - Counter(col).most_common(1)[0][1]
 
         return score
 
     def count(self, motifs: np.ndarray) -> np.ndarray:
-
-        motifs_t = motifs.T
-
         res = np.zeros(shape=(motifs.shape[1], 4), dtype="int")
-
-
-        for idx, col in enumerate(motifs_t):
+        for idx, col in enumerate(motifs.T):
             counts = Counter({'A':0, 'C':0, 'G':0, 'T':0})
             counts.update(col)
             res[idx] = [counts['A'], counts['C'], counts['G'], counts['T']]
 
-
         return res.T
+
+    def profile(self, motifs: np.ndarray) -> np.ndarray:
+        dividend = motifs.shape[0]
+        counts = self.count(motifs)
+        return counts/dividend
+
 
 
 uut = MotifAlgorithm()
 data = np.loadtxt('data/replication/motifs.txt', dtype="str")
-print(data.shape[0])
 print(uut.score(data))
 print(uut.count(data))
+print(uut.profile(data))
