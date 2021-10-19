@@ -64,9 +64,28 @@ class MotifAlgorithm:
         return counts/dividend
 
 
+    # TODO: return all combinations of tied breaker
+    def consensus(self, motifs: np.ndarray) -> str:
+
+        pprofile = self.profile(motifs).T
+
+        consensus_motif = []
+        for p in pprofile:
+            idx = np.argmax(p)
+            if idx == 0:
+                consensus_motif.append('A')
+            elif idx == 1:
+                consensus_motif.append('C')
+            elif idx == 2:
+                consensus_motif.append('G')
+            elif idx == 3:
+                consensus_motif.append('T')
+
+        return ''.join(consensus_motif)
 
 uut = MotifAlgorithm()
 data = np.loadtxt('data/replication/motifs.txt', dtype="str")
 print(uut.score(data))
 print(uut.count(data))
 print(uut.profile(data))
+print(uut.consensus(data))
