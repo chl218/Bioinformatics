@@ -1,15 +1,18 @@
-from collections import Counter
-from functools import total_ordering
+
 from pathlib import Path
 import sys
 path_root = Path(__file__).parents[2]
 sys.path.append(str(path_root))
 print(sys.path)
 
-from typing import List
-from src.replication.genome_replication_algorithm import GenomeReplicationAlgorithm
-import numpy as np
+
 import math
+import numpy as np
+from collections import Counter
+from src.replication.genome_replication_algorithm import GenomeReplicationAlgorithm
+from typing import List
+
+
 
 class MotifAlgorithm:
 
@@ -28,7 +31,6 @@ class MotifAlgorithm:
         for i in range(0, len(dna_list[0]) - k + 1):
             patterns.append(dna_list[0][i:i+k])
 
-
         motifs = set()
         # for each k-mer pattern in the first string in Dna
         for pattern in patterns:
@@ -42,7 +44,10 @@ class MotifAlgorithm:
         return list(motifs)
 
     def score(self, motifs: np.ndarray) -> int:
+        """Score
 
+        The total number of unpopular nucleotide in the motif column matrix
+        """
         total = motifs.shape[0]
 
         score = 0
@@ -52,23 +57,33 @@ class MotifAlgorithm:
         return score
 
     def count(self, motifs: np.ndarray) -> np.ndarray:
+        """Count
+
+        The total number of nucleotide in the motif column matrix
+        """
         res = np.zeros(shape=(motifs.shape[1], 4), dtype="int")
         for idx, col in enumerate(motifs.T):
-            counts = Counter({'A':0, 'C':0, 'G':0, 'T':0})
+            counts = Counter({'A': 0, 'C': 0, 'G': 0, 'T': 0})
             counts.update(col)
             res[idx] = [counts['A'], counts['C'], counts['G'], counts['T']]
 
         return res.T
 
     def profile(self, motifs: np.ndarray) -> np.ndarray:
+        """Profile
+
+        The probability of each nucleotide in the motif column matrix
+        """
         dividend = motifs.shape[0]
         counts = self.count(motifs)
         return counts/dividend
 
-
     # TODO: return all combinations of tied breaker
     def consensus(self, motifs: np.ndarray) -> str:
+        """Consensus String
 
+        The most popular letters in each column of the motif matrix
+        """
         pprofile = self.profile(motifs).T
 
         consensus_motif = []
@@ -86,7 +101,10 @@ class MotifAlgorithm:
         return ''.join(consensus_motif)
 
     def entropy(self, motifs: np.ndarray) -> float:
+        """Entropy
 
+        Total uncertainty of a probability distribution in the motif matrix
+        """
         pprofile = self.profile(motifs).T
 
         total_entropy = 0
@@ -99,10 +117,5 @@ class MotifAlgorithm:
 
         return total_entropy
 
+
 uut = MotifAlgorithm()
-data = np.loadtxt('data/replication/motifs.txt', dtype="str")
-print(uut.score(data))
-print(uut.count(data))
-print(uut.profile(data))
-print(uut.consensus(data))
-print(uut.entropy(data))
