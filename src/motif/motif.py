@@ -1,4 +1,5 @@
 from collections import Counter
+from functools import total_ordering
 from pathlib import Path
 import sys
 path_root = Path(__file__).parents[2]
@@ -8,6 +9,7 @@ print(sys.path)
 from typing import List
 from src.replication.genome_replication_algorithm import GenomeReplicationAlgorithm
 import numpy as np
+import math
 
 class MotifAlgorithm:
 
@@ -83,9 +85,24 @@ class MotifAlgorithm:
 
         return ''.join(consensus_motif)
 
+    def entropy(self, motifs: np.ndarray) -> float:
+
+        pprofile = self.profile(motifs).T
+
+        total_entropy = 0
+        for probs in pprofile:
+            sub_entropy = 0
+            for val in probs:
+                if val != 0:
+                    sub_entropy += val * math.log2(val)
+            total_entropy -= sub_entropy
+
+        return total_entropy
+
 uut = MotifAlgorithm()
 data = np.loadtxt('data/replication/motifs.txt', dtype="str")
 print(uut.score(data))
 print(uut.count(data))
 print(uut.profile(data))
 print(uut.consensus(data))
+print(uut.entropy(data))
