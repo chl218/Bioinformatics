@@ -64,7 +64,6 @@ class MotifAlgorithm:
         res = np.zeros(shape=(len(motifs[0]), 4), dtype="int")
         column_vectors = [[sublist[idx] for sublist in motifs] for idx in range(len(motifs[0]))]
         for idx, col in enumerate(column_vectors):
-            print(col)
             counts = Counter({'A': 0, 'C': 0, 'G': 0, 'T': 0})
             counts.update(col)
             res[idx] = ([counts['A'], counts['C'], counts['G'], counts['T']])
@@ -76,9 +75,15 @@ class MotifAlgorithm:
 
         The probability of each nucleotide in the motif column matrix
         """
+
         dividend = motifs.shape[0]
-        counts = self.count(motifs)
-        return counts/dividend
+        probs = self.count(motifs)/dividend
+        res = { 'A': probs[0],
+                'C': probs[1],
+                'G': probs[2],
+                'T': probs[3]}
+
+        return res
 
     # TODO: return all combinations of tied breaker
     def consensus(self, motifs: np.ndarray) -> str:
