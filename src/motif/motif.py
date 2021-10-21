@@ -56,16 +56,18 @@ class MotifAlgorithm:
 
         return score
 
-    def count(self, motifs: np.ndarray) -> np.ndarray:
+    def count(self, motifs: List[List[str]]) -> np.ndarray:
         """Count
 
         The total number of nucleotide in the motif column matrix
         """
-        res = np.zeros(shape=(motifs.shape[1], 4), dtype="int")
-        for idx, col in enumerate(motifs.T):
+        res = np.zeros(shape=(len(motifs[0]), 4), dtype="int")
+        column_vectors = [[sublist[idx] for sublist in motifs] for idx in range(len(motifs[0]))]
+        for idx, col in enumerate(column_vectors):
+            print(col)
             counts = Counter({'A': 0, 'C': 0, 'G': 0, 'T': 0})
             counts.update(col)
-            res[idx] = [counts['A'], counts['C'], counts['G'], counts['T']]
+            res[idx] = ([counts['A'], counts['C'], counts['G'], counts['T']])
 
         return res.T
 
@@ -173,15 +175,23 @@ class MotifAlgorithm:
 
         return kmer
 
+    # def greedy_motif_search(self, dna_list: List[str], k: int, t: int) -> List[str]:
 
-dna = "ACACCACGGCGAATTGAGAGTATGAAATATTATCCGTATGAAGAGCTAGGTTGAAGGGAGACTAGACGATTTAAAATTAACGTTGGCCCCTCCCTCTCGAGAGCAGTCTAATCAGAGGGCCACCGTCTGTTCCACGTAGATAACCCGTCGGAGCGCAAGGGTCGAACCTCCAAAATAGCTACCCAGGAGCCCTTTTTTGGGAAAACTCCCCCATACGCTGTCGCCGGCATACAGCTTCAGAGTCCCATTTGGCAGACCTGGACCTTGCCCTACTTGGCCCTCGTCTCCACCGCTAAACGATCAAACGTACTATAAGTAGTGCGTAATCTTCTGGCTATAAACCACTAATTTGTAGCCACGCTGCTATACGTACAATGACCTAGGGGACGTAAACAATCGGACATTGCGACTGCGAAACTGGTATAACCTGCAAAAATCTGAATTTGAGGTTACGCAATTGGCACTGTAAAATCTGGCTAGCCACAGGATTAGTACGTACCGATGGCCACGTTGAAATCGCTTGGTTATGCAGGACCCCGGGACGCTAAGTTAAAAGTGGACGGGTGTCGGCGGTCGCCGATGAACTGTTCTCTTGACAGACGAAAACGCGTCATAAAGGTCCGACCGGTCCTACGCCATCTAAGTAACTGCGTCTTTATCTCCCCTTACACTGCAACTGCGTGCAGAATATTTCGCTTCTGTAATTAGAGAGACCCGGGGGGTATATATGTGATTAACTATTCACACTGATTTTGGTTCCTGCCAAAGTGGTGCTCTCAAGGCTTGGACCCGCCGGCGTCAATGGTTGTAGAGCTCTCGTAGTATAAAGACTCATCATTACGAACAATCGAGATATATGCGTTGAGGACAATTTACTGACCCCAGTTCGATTGTGTTTTTAGCCGTGCTTCGGTCCAACTCGACCTTTTTTTTCTTTTTGGCCCGTTGCGGCCCTGTGCGGCAATTAGTCAGGCTGAGTCACAACAGTTCCAGACCCTGT"
-k = 14
-profile = {
-    'A': [0.282,0.296,0.211,0.268,0.141,0.268,0.31,0.268,0.268,0.254,0.183,0.338,0.211,0.239],
-    'C': [0.127,0.197,0.211,0.239,0.225,0.31,0.197,0.183,0.282,0.254,0.296,0.197,0.31,0.268],
-    'G': [0.296,0.268,0.394,0.183,0.338,0.211,0.282,0.282,0.197,0.282,0.197,0.239,0.254,0.31],
-    'T': [0.296,0.239,0.183,0.31,0.296,0.211,0.211,0.268,0.254,0.211,0.324,0.225,0.225,0.183]
-}
+    #     best_motifs = []
+    #     for dna in dna_list:
+    #         best_motifs.append(dna[0:t])
+
+
+
+    #     for i in range(0, t - k + 1):
+    #         motifs = [dna_list[0][i:k]]
+
+    #         for j in range(1, t):
+
+    #             pprofile = self.profile(motifs)
+
+
+
 
 
 
@@ -189,4 +199,9 @@ profile = {
 
 
 uut = MotifAlgorithm()
-print(uut.profile_most_probable_kmer(dna, k, profile))
+
+
+tt = np.array(["GGC", "AAG"], dtype="str")
+print(tt)
+print(uut.count(tt))
+print(uut.profile(tt))
