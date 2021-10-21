@@ -11,7 +11,7 @@ import numpy as np
 from collections import Counter
 from src.replication.genome_replication_algorithm import GenomeReplicationAlgorithm
 from typing import List
-
+import pprint
 
 
 class MotifAlgorithm:
@@ -43,15 +43,16 @@ class MotifAlgorithm:
 
         return list(motifs)
 
-    def score(self, motifs: np.ndarray) -> int:
+    def score(self, motifs: List[str]) -> int:
         """Score
 
         The total number of unpopular nucleotide in the motif column matrix
         """
-        total = motifs.shape[0]
+        total = len(motifs)
+        column_vectors = [[sublist[idx] for sublist in motifs] for idx in range(len(motifs[0]))]
 
         score = 0
-        for col in motifs.T:
+        for col in column_vectors:
             score += total - Counter(col).most_common(1)[0][1]
 
         return score
@@ -61,6 +62,7 @@ class MotifAlgorithm:
 
         The total number of nucleotide in the motif column matrix
         """
+
         res = np.zeros(shape=(len(motifs[0]), 4), dtype="int")
         column_vectors = [[sublist[idx] for sublist in motifs] for idx in range(len(motifs[0]))]
         for idx, col in enumerate(column_vectors):
@@ -70,19 +72,19 @@ class MotifAlgorithm:
 
         return res.T
 
-    def profile(self, motifs: np.ndarray) -> np.ndarray:
+    def profile(self, motifs: List[str]) -> dict:
         """Profile
 
         The probability of each nucleotide in the motif column matrix
         """
 
-        dividend = motifs.shape[0]
+        dividend = len(motifs)
         probs = self.count(motifs)/dividend
+
         res = { 'A': probs[0],
                 'C': probs[1],
                 'G': probs[2],
                 'T': probs[3]}
-
         return res
 
     # TODO: return all combinations of tied breaker
@@ -165,10 +167,8 @@ class MotifAlgorithm:
     def profile_most_probable_kmer(self, dna: str, k: int, profile_matrix: dict) -> str:
 
         p_max = 0
-        kmer = ""
-
-        n = len(dna) - k + 1
-        for i in range(0, n):
+        kmer = dna[0:k]
+        for i in range(0, len(dna) - k + 1):
             substr = dna[i:i+k]
             p = profile_matrix[substr[0]][0]
             for j in range(1, k):
@@ -180,24 +180,24 @@ class MotifAlgorithm:
 
         return kmer
 
-    # def greedy_motif_search(self, dna_list: List[str], k: int, t: int) -> List[str]:
+    def greedy_motif_search(self, dna_list: List[str], k: int, t: int) -> List[str]:
 
-    #     best_motifs = []
-    #     for dna in dna_list:
-    #         best_motifs.append(dna[0:t])
+        best_motifs = []
+        for dna in dna_list:
+            best_motifs.append(dna[0:k])
 
+        for j in range(0, t - k + 1):
+            motifs = [dna_list[0][j:j+k]]
 
+            for i in range(1, len(dna_list)):
+                pprofile = self.profile(motifs)
+                motifs.append(self.profile_most_probable_kmer(dna_list[i], k, pprofile))
 
-    #     for i in range(0, t - k + 1):
-    #         motifs = [dna_list[0][i:k]]
+            # print(motifs)
+            if self.score(motifs) < self.score(best_motifs):
+                best_motifs = motifs
 
-    #         for j in range(1, t):
-
-    #             pprofile = self.profile(motifs)
-
-
-
-
+        return best_motifs
 
 
 
@@ -206,7 +206,11 @@ class MotifAlgorithm:
 uut = MotifAlgorithm()
 
 
-tt = np.array(["GGC", "AAG"], dtype="str")
-print(tt)
-print(uut.count(tt))
-print(uut.profile(tt))
+# tt = ["GGC", "AAG"]
+# print(tt)
+# print(uut.score(tt))
+
+k = 3
+t = 5
+dna = ["GGCGTTCAGGCA","AAGAATCAGTCA","CAAGGAGTTCGC","CACGTCAATCAC","CAATAATATTCG"]
+print(uut.greedy_motif_search(dna, k, t))
