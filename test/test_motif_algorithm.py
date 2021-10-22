@@ -51,7 +51,16 @@ class TestMotifAlgorithm(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_median_string(self):
-        pass
+        inputs = self.read_data(self.dataPath+"/median_string_inputs/input_", "str", 5)
+        expected = self.read_data(self.dataPath+"/median_string_outputs/output_", "str", 5)
+
+        actual = []
+        for input in inputs:
+            dna = list(input[1].split(' '))
+            actual.append(self.uut.median_string(dna, int(input[0])))
+
+        for e1, a1 in zip(expected, actual):
+            self.assertIn(e1[0], a1)
 
     def test_greedy_motif_search(self):
         pass

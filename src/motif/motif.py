@@ -1,3 +1,11 @@
+
+from pathlib import Path
+import sys
+path_root = Path(__file__).parents[2]
+sys.path.append(str(path_root))
+print(sys.path)
+
+
 import math
 import numpy as np
 import sys
@@ -161,11 +169,13 @@ class MotifAlgorithm:
                 choices of k-mers.
         """
         distance = sys.maxsize
-        patterns = self.gra.neighbors("A"*k, k)
+        patterns = sorted(self.gra.neighbors("A"*k, k))
+        # print(patterns)
         median = []
         for pattern in patterns:
             d = self.distance_between_pattern_and_strings(pattern, dna)
-            if distance > d:
+            print(d, end=' ')
+            if distance >= d:
                 distance = d
                 median.append(pattern)
 
@@ -248,3 +258,11 @@ class MotifAlgorithm:
                 best_motifs = motifs
 
         return best_motifs
+
+
+uut = MotifAlgorithm()
+
+# k = 3
+# d = ['AAATTGACGCAT','GACGACCACGTT','CGTCAGCGCCTG','GCTGAGCACCGG','AGTACGGGACAG']
+
+# print(sorted(uut.median_string(d, k)))
