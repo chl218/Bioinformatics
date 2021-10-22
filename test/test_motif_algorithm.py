@@ -15,7 +15,12 @@ class TestMotifAlgorithm(unittest.TestCase):
         data = []
         for i in range(1, file_count+1):
             with open(file_path+str(i)+".txt") as f:
-                data.append(f.read().splitlines())
+                if read_type == "int":
+                    line = f.read().splitlines()
+                    data.append(list(map(int, line)))
+                else:
+                    data.append(f.read().splitlines())
+
         return data
 
     def test_motif_enumeration(self):
@@ -35,7 +40,15 @@ class TestMotifAlgorithm(unittest.TestCase):
                 self.assertCountEqual(e1[0].split(' '), a1)
 
     def test_distance_between_pattern_and_strings(self):
-        pass
+        inputs = self.read_data(self.dataPath+"/distance_between_pattern_and_strings_inputs/input_", "str", 6)
+        expected = self.read_data(self.dataPath+"/distance_between_pattern_and_strings_outputs/output_", "int", 6)
+
+        actual = []
+        for input in inputs:
+            dna = list(input[1].split(' '))
+            actual.append([self.uut.distance_between_pattern_and_strings(input[0], dna)])
+
+        self.assertEqual(expected, actual)
 
     def test_median_string(self):
         pass

@@ -1,5 +1,6 @@
 import math
 import numpy as np
+import sys
 from collections import Counter
 from src.replication.genome_replication_algorithm import GenomeReplicationAlgorithm
 from typing import List
