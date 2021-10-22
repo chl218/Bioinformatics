@@ -40,5 +40,8 @@ class TestMotifAlgorithm(unittest.TestCase):
     def test_median_string(self):
         pass
 
+    def test_greedy_motify_search(self):
+        pass
+
 if __name__ == '__main__':
     unittest.main()
