@@ -63,7 +63,17 @@ class TestMotifAlgorithm(unittest.TestCase):
             self.assertIn(e1[0], a1)
 
     def test_greedy_motif_search(self):
-        pass
+        inputs = self.read_data(self.dataPath+"/greedy_motif_search_inputs/input_", "str",6)
+        expected = self.read_data(self.dataPath+"/greedy_motif_search_outputs/output_", "str", 6)
+
+        actual = []
+        for input in inputs:
+            k = int(input[0].split(' ')[0])
+            dna = list(input[1].split(' '))
+            actual.append(self.uut.greedy_motif_search(dna, k))
+
+        for e1, a1 in zip(expected, actual):
+            self.assertEqual(list(e1[0].split(' ')), a1)
 
     def test_greedy_motif_pseudocount_search(self):
         pass
