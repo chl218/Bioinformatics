@@ -9,7 +9,7 @@ class TestMotifAlgorithm(unittest.TestCase):
         super().__init__(methodName=methodName)
 
         self.uut = MotifAlgorithm()
-        self.dataPath = "data/replication"
+        self.dataPath = "data/motif"
 
     def read_data(self, file_path: str, read_type: str, file_count: int) -> list:
         data = []
@@ -76,7 +76,17 @@ class TestMotifAlgorithm(unittest.TestCase):
             self.assertEqual(list(e1[0].split(' ')), a1)
 
     def test_greedy_motif_pseudocount_search(self):
-        pass
+        inputs = self.read_data(self.dataPath+"/greedy_motif_pseudocount_inputs/input_", "str", 1)
+        expected = self.read_data(self.dataPath+"/greedy_motif_pseudocount_outputs/output_", "str", 1)
+
+        actual = []
+        for input in inputs:
+            k = int(input[0].split(' ')[0])
+            dna = list(input[1].split(' '))
+            actual.append(self.uut.greedy_motif_search(dna, k))
+
+        for e1, a1 in zip(expected, actual):
+            self.assertCountEqual(list(e1[0].split(' ')), a1)
 
 if __name__ == '__main__':
     unittest.main()

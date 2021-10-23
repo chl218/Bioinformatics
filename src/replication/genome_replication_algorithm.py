@@ -1,3 +1,11 @@
+
+from pathlib import Path
+import sys
+path_root = Path(__file__).parents[2]
+sys.path.append(str(path_root))
+
+
+
 from typing import List
 from src.replication.pattern_finding_algorithm import PatternFindingAlgorithm
 
@@ -88,7 +96,6 @@ class GenomeReplicationAlgorithm:
 
     def neighbors(self, pattern: str, d: int) -> List[str]:
         """ Neighbors
-
         Generate d-neighborhood of all k-mers whose Hamming distance from
         pattern does not exceed d
         """
@@ -97,19 +104,19 @@ class GenomeReplicationAlgorithm:
         if len(pattern) == 1:
             return ['A', 'C', 'G', 'T']
 
-        neighbor = set()
+        neighbor = []
         suffix_pattern = pattern[1:]
         suffix_neighbors = self.neighbors(suffix_pattern, d)
         for sn in suffix_neighbors:
             if self.hamming_distance(suffix_pattern, sn) < d:
-                neighbor.add('A' + sn)
-                neighbor.add('C' + sn)
-                neighbor.add('G' + sn)
-                neighbor.add('T' + sn)
+                neighbor.append('A' + sn)
+                neighbor.append('C' + sn)
+                neighbor.append('G' + sn)
+                neighbor.append('T' + sn)
             else:
-                neighbor.add(pattern[0] + sn)
+                neighbor.append(pattern[0] + sn)
 
-        return list(neighbor)
+        return neighbor
 
     def frequent_words_with_mismatches(self, text: str, k: int, d: int) -> List[str]:
         """ Most Frequent Words with Mismatch
@@ -162,3 +169,6 @@ class GenomeReplicationAlgorithm:
                 most_freq.append(k)
 
         return most_freq
+
+
+uut = GenomeReplicationAlgorithm()
