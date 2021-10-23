@@ -75,7 +75,7 @@ class TestPatternFindingAlgorithm(unittest.TestCase):
         expected2 = "116556 149355 151913 152013 152394 186189 194276 200076 224527 307692 479770 610980 653338 679985 768828 878903 985368"
         p1 = "CTTGATCAT"
         p2 = "ATGATCAAG"
-        genome = np.loadtxt(self.dataPath+"/Vibrio_cholerae.txt", dtype="str").tolist()
+        genome = np.loadtxt("data/genomes/Vibrio_cholerae.txt", dtype="str").tolist()
 
         self.assertEqual(' '.join(map(str, self.uut.pattern_match(p1, genome))), expected1)
         self.assertEqual(' '.join(map(str, self.uut.pattern_match(p2, genome))), expected2)

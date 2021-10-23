@@ -8,6 +8,7 @@ class TestMotifAlgorithm(unittest.TestCase):
     def __init__(self, methodName: str = ...) -> None:
         super().__init__(methodName=methodName)
 
+        self.maxDiff = None
         self.uut = MotifAlgorithm()
         self.dataPath = "data/motif"
 
@@ -76,14 +77,14 @@ class TestMotifAlgorithm(unittest.TestCase):
             self.assertEqual(list(e1[0].split(' ')), a1)
 
     def test_greedy_motif_pseudocount_search(self):
-        inputs = self.read_data(self.dataPath+"/greedy_motif_pseudocount_inputs/input_", "str", 1)
-        expected = self.read_data(self.dataPath+"/greedy_motif_pseudocount_outputs/output_", "str", 1)
+        inputs = self.read_data(self.dataPath+"/greedy_motif_pseudocount_inputs/input_", "str", 4)
+        expected = self.read_data(self.dataPath+"/greedy_motif_pseudocount_outputs/output_", "str", 4)
 
         actual = []
         for input in inputs:
             k = int(input[0].split(' ')[0])
             dna = list(input[1].split(' '))
-            actual.append(self.uut.greedy_motif_search(dna, k))
+            actual.append(self.uut.greedy_motif_pesudocount_search(dna, k))
 
         for e1, a1 in zip(expected, actual):
             self.assertCountEqual(list(e1[0].split(' ')), a1)

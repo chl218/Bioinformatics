@@ -3,7 +3,6 @@ from pathlib import Path
 import sys
 path_root = Path(__file__).parents[2]
 sys.path.append(str(path_root))
-print(sys.path)
 
 
 import math
@@ -207,9 +206,7 @@ class MotifAlgorithm:
         Input:  Integers k and t, followed by a space-separated collection of
                 strings Dna.
         Output: A collection of strings BestMotifs resulting from applying
-                GreedyMotifSearch(Dna, k, t). If at any step you find more than
-                one Profile-most probable k-mer in a given string, use the one
-                occurring first.
+                GreedyMotifSearch(Dna, k, t).
         """
 
         # BestMotifs ← motif matrix formed by first k-mers in each string from Dna
@@ -258,7 +255,5 @@ class MotifAlgorithm:
                 best_motifs = motifs
 
         return best_motifs
-
-
 
 uut = MotifAlgorithm()
