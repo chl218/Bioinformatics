@@ -169,13 +169,14 @@ class MotifAlgorithm:
                 choices of k-mers.
         """
         distance = sys.maxsize
-        patterns = self.gra.neighbors("A"*k, k) # TODO: check why none sorted is indeterministic
-        print(patterns)
+        patterns = self.gra.neighbors("A"*k, k)
         median = []
         for pattern in patterns:
             d = self.distance_between_pattern_and_strings(pattern, dna)
             if d < distance:
                 distance = d
+                median = [pattern]
+            elif d == distance:
                 median.append(pattern)
 
         return median
@@ -261,7 +262,3 @@ class MotifAlgorithm:
 
 
 uut = MotifAlgorithm()
-
-k = 3
-dna = ["AAATTGACGCAT","GACGACCACGTT","CGTCAGCGCCTG","GCTGAGCACCGG","AGTTCGGGACAG"]
-' '.join(uut.median_string(dna, k))
