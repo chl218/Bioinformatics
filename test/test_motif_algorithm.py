@@ -89,5 +89,19 @@ class TestMotifAlgorithm(unittest.TestCase):
         for e1, a1 in zip(expected, actual):
             self.assertCountEqual(list(e1[0].split(' ')), a1)
 
+    def test_randomized_motif_search(self):
+        inputs = self.read_data(self.dataPath+"/randomized_motif_inputs/input_", "str", 4)
+        expected = self.read_data(self.dataPath+"/randomized_motif_outputs/output_", "str", 4)
+
+        actual = []
+        for input in inputs:
+            k = int(input[0].split(' ')[0])
+            dna = list(input[1].split(' '))
+            actual.append(self.uut.randomized_motif_search_iteration(1000, dna, k))
+
+        for e1, a1 in zip(expected, actual):
+            print('\n', list(e1[0].split(' ')), '\n', a1)
+            # self.assertCountEqual(list(e1[0].split(' ')), a1)
+
 if __name__ == '__main__':
     unittest.main()
