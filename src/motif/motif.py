@@ -292,22 +292,42 @@ class MotifAlgorithm:
 
         return best_motif
 
-    def gibbs_sampler(self) -> List[str]:
-        pass
+    def rand_cdf(self, n: int) -> int:
 
-    def rand_cdf(self, probs: List[float]) -> int:
+        probs = []
+        for _ in range(n):
+            probs.append(random.uniform(0,1))
+
         s = sum(probs)
         p_normalized = [p / s for p in probs]
-        choices = list(range(1, len(probs)+1))
+        choices = list(range(0, n))
         return np.random.choice(choices, p=p_normalized)
 
+    def gibbs_sampler(self, dna_list: List[str], k: int, n: int) -> List[str]:
+        best_motifs = []
+        for dna in dna_list:
+            i = random.randint(0, len(dna)- k)
+            best_motifs.append(dna[i:i+k])
 
+        t = len(dna_list)
+
+
+        for j in range(n):
+            i = self.rand_cdf(t)
+
+            pprofile = self.pseudocount_profile(best_motifs)
+            curr_motifs = self.motifs(pprofile, dna_list)
+
+            if self.score(curr_motifs) < self.score(best_motifs):
+                best_motifs = curr_motifs
+            else:
+                return best_motifs
 
 uut = MotifAlgorithm()
 
 p = [0.75, 0.50, 0.25, 0.1]
 res = []
 for i in range(100):
-    res.append(uut.rand_cdf(p))
+    res.append(uut.rand_cdf(5))
 
 print(Counter(res))
