@@ -292,5 +292,22 @@ class MotifAlgorithm:
 
         return best_motif
 
+    def gibbs_sampler(self) -> List[str]:
+        pass
+
+    def rand_cdf(self, probs: List[float]) -> int:
+        s = sum(probs)
+        p_normalized = [p / s for p in probs]
+        choices = list(range(1, len(probs)+1))
+        return np.random.choice(choices, p=p_normalized)
+
+
 
 uut = MotifAlgorithm()
+
+p = [0.75, 0.50, 0.25, 0.1]
+res = []
+for i in range(100):
+    res.append(uut.rand_cdf(p))
+
+print(Counter(res))
