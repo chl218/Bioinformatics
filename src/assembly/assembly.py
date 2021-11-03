@@ -23,5 +23,5 @@ class AssemblyAlgorithm:
 
         return res
 
-
 uut = AssemblyAlgorithm()
+
