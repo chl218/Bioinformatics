@@ -15,7 +15,7 @@ class TestAssemblyAlgorithm(unittest.TestCase):
     def read_data(self, file_path: str, read_type: str, file_count: int) -> list:
 
         data = []
-        for i in range(1, file_count+1):
+        for i in range(file_count):
             with open(file_path+str(i)+".txt") as f:
                 if read_type == "int":
                     line = f.read().splitlines()
