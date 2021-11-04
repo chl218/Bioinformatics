@@ -1,5 +1,5 @@
 
-from typing import List
+from typing import List, OrderedDict
 
 
 class AssemblyAlgorithm:
@@ -75,7 +75,12 @@ class AssemblyAlgorithm:
 
 
     def path_graph(self, k: int, text: str) -> List[str]:
+        """ Path Graph
 
+        PathGraph(k, Text) is the path consisting of |Text| - k + 1 edges, where
+        the i-th edge of this path is labeled by the i-th k-mer in Text and the
+        i-th node of the path is labeled by the i-th (k - 1)-mer in Text
+        """
         path = []
         kmers = self.composition(k, text)
         for kmer in kmers:
@@ -84,11 +89,29 @@ class AssemblyAlgorithm:
 
         return path
 
+    def deBruijn_graph(self, k: int, text: str) -> List[List[str]]:
+
+        path = self.path_graph(k, text)
+
+        map = OrderedDict()
+        for kmer in sorted(path):
+            map[kmer] = []
+
+        for i in range(len(path)-1):
+            map[path[i]].append(path[i+1])
+
+        graph = []
+        for key, val in map.items():
+            graph.append([key] + val)
+
+        return graph
+
+
 uut = AssemblyAlgorithm()
 
-# input = None
-# with open("/home/chl218/Downloads/dataset_198_10.txt") as f:
-#     input = f.read().splitlines()
+input = None
+with open("/home/chl218/Downloads/dataset_199_6.txt") as f:
+    input = f.read().splitlines()
 # uut.print_adjacency_graph(uut.overlap(input))
 
 
@@ -101,7 +124,7 @@ uut = AssemblyAlgorithm()
 # uut.print_adjacency_graph(uut.overlap(kmers), False)
 
 
-k = 3
-t = "TAATGCCATGGGATGTT"
+k = 4
+t = "AAGATTCTCTAAGA"
 
-print(uut.path_graph(3, t))
+uut.print_adjacency_graph(uut.deBruijn_graph(int(input[0]), input[1]))
