@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import List
 import unittest
 import numpy as np
 from src.assembly.assembly import AssemblyAlgorithm
@@ -29,14 +29,11 @@ class TestAssemblyAlgorithm(unittest.TestCase):
     def input_to_graph(self, xs: List[str]) -> List[List[str]]:
 
         graph = []
-        sorted(xs)
         for x in sorted(xs):
-            nodes = x.split("->")
-
-            node = nodes[0]
-            connects = sorted(nodes[1].split(","))
-
-            graph.append([node] + connects)
+            tokens = x.split("->")
+            node = tokens[0]
+            connectedTo = sorted(tokens[1].split(","))
+            graph.append([node] + connectedTo)
 
         return graph
 
