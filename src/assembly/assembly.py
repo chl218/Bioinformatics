@@ -74,10 +74,34 @@ class AssemblyAlgorithm:
             print(s[:-1])
 
 
+    def path_graph(self, k: int, text: str) -> List[str]:
+
+        path = []
+        kmers = self.composition(k, text)
+        for kmer in kmers:
+            path.append(self.prefix(kmer, k-1))
+        path.append(self.suffix(kmers[-1], k-1))
+
+        return path
+
 uut = AssemblyAlgorithm()
 
+# input = None
+# with open("/home/chl218/Downloads/dataset_198_10.txt") as f:
+#     input = f.read().splitlines()
+# uut.print_adjacency_graph(uut.overlap(input))
 
 
 
+# k = 4
+# t = "AAGATTCTCTAAGA"
+# kmers = uut.composition(k, t)
+# print(t, kmers)
+
+# uut.print_adjacency_graph(uut.overlap(kmers), False)
 
 
+k = 3
+t = "TAATGCCATGGGATGTT"
+
+print(uut.path_graph(3, t))
