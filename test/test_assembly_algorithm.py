@@ -47,8 +47,8 @@ class TestAssemblyAlgorithm(unittest.TestCase):
 
 
     def test_composition(self):
-        inputs = self.read_data(self.dataPath+"/composition_inputs/test", "str", 4)
-        expected = self.read_data(self.dataPath+"/composition_outputs/test", "str", 4)
+        inputs = self.read_data(self.dataPath+"/composition_inputs/test", "str", 5)
+        expected = self.read_data(self.dataPath+"/composition_outputs/test", "str", 5)
         actual = []
         for input in inputs:
             actual.append(self.uut.composition(int(input[0]), input[1]))
