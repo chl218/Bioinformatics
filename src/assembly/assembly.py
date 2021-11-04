@@ -42,7 +42,14 @@ class AssemblyAlgorithm:
 
 
     def overlap(self, kmers: List[str]) -> List[List[str]]:
+        """ Overlap Graph
 
+        Input:  A collection Patterns of k-mers.
+        Output: The overlap graph Overlap(Patterns), in the form of an adjacency
+                list.
+
+        Note: Does not account for repeated elements in Patterns.
+        """
         graph = []
         for kmer in kmers:
             graph.append([kmer])
@@ -55,7 +62,8 @@ class AssemblyAlgorithm:
                     continue
 
                 if self.suffix(kmers[i], k) == self.prefix(kmers[j], k):
-                    graph[i].append(kmers[j])
+                    if kmers[j] not in graph[i]:
+                        graph[i].append(kmers[j])
 
         return graph
 
@@ -124,7 +132,7 @@ with open("/home/chl218/Downloads/dataset_199_6.txt") as f:
 # uut.print_adjacency_graph(uut.overlap(kmers), False)
 
 
-k = 4
-t = "AAGATTCTCTAAGA"
+# k = 4
+# t = "AAGATTCTCTAAGA"
 
-uut.print_adjacency_graph(uut.deBruijn_graph(int(input[0]), input[1]))
+# uut.print_adjacency_graph(uut.deBruijn_graph(int(input[0]), input[1]))
