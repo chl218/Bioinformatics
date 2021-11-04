@@ -40,13 +40,12 @@ class TestAssemblyAlgorithm(unittest.TestCase):
 
         return graph
 
+    def compare_graphs(self, expected_graph: List[List[str]], actual_graph: List[List[str]]):
 
-    def compare_graphs(self, graph1: List[List[str]], graph2: List[List[str]]):
-        for g1, g2 in zip(graph1, graph2):
-            for adj_lst in g2:
-                if len(adj_lst) == 1:
-                    continue
-                self.assertIn(adj_lst, g1)
+        for adj_lst in actual_graph:
+            if len(adj_lst) == 1:
+                continue
+            self.assertIn(adj_lst, expected_graph)
 
 
     def test_composition(self):
@@ -59,25 +58,11 @@ class TestAssemblyAlgorithm(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_overlap_graph(self):
-        inputs = self.read_data(self.dataPath+"/overlap_graph_inputs/test", "str", 1)
-        expected = self.read_data(self.dataPath+"/overlap_graph_outputs/test", "str", 1)
+        inputs = self.read_data(self.dataPath+"/overlap_graph_inputs/test", "str", 3)
+        expected = self.read_data(self.dataPath+"/overlap_graph_outputs/test", "str", 3)
         actual = []
         for input in inputs:
             actual.append(self.uut.overlap(input))
 
-
-
-        # # self.assertEqual(expected, actual)
-
-        print(inputs[0])
-        print(expected[0])
-        print(self.input_to_graph(expected[0]))
-        print(actual[0])
-
         for g1, g2 in zip(expected, actual):
-            g1 = self.input_to_graph(g1)
-            for adj_lst in g2:
-                if len(adj_lst) == 1:
-                    continue
-                self.assertIn(adj_lst, g1)
-
+            self.compare_graphs(self.input_to_graph(g1), g2)
