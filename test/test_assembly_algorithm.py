@@ -45,6 +45,7 @@ class TestAssemblyAlgorithm(unittest.TestCase):
         for adj_lst in actual_graph:
             if len(adj_lst) == 1:
                 continue
+            adj_lst[1:] = sorted(adj_lst[1:])
             self.assertIn(adj_lst, expected_graph)
 
 
@@ -58,8 +59,8 @@ class TestAssemblyAlgorithm(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_overlap_graph(self):
-        inputs = self.read_data(self.dataPath+"/overlap_graph_inputs/test", "str", 3)
-        expected = self.read_data(self.dataPath+"/overlap_graph_outputs/test", "str", 3)
+        inputs = self.read_data(self.dataPath+"/overlap_graph_inputs/test", "str", 7)
+        expected = self.read_data(self.dataPath+"/overlap_graph_outputs/test", "str", 7)
         actual = []
         for input in inputs:
             actual.append(self.uut.overlap(input))
