@@ -12,9 +12,7 @@ class TestAssemblyAlgorithm(unittest.TestCase):
         self.uut = AssemblyAlgorithm()
         self.dataPath = "data/assembly"
 
-
     def read_data(self, file_path: str, read_type: str, file_count: int) -> List:
-
         data = []
         for i in range(file_count):
             with open(file_path+str(i)+".txt") as f:
@@ -27,24 +25,21 @@ class TestAssemblyAlgorithm(unittest.TestCase):
         return data
 
     def input_to_graph(self, xs: List[str]) -> List[List[str]]:
-
         graph = []
         for x in sorted(xs):
             tokens = x.split("->")
-            node = tokens[0]
-            connectedTo = sorted(tokens[1].split(","))
+            node = tokens[0].strip()
+            connectedTo = sorted([x.strip() for x in tokens[1].split(",")])
             graph.append([node] + connectedTo)
 
         return graph
 
     def compare_graphs(self, expected_graph: List[List[str]], actual_graph: List[List[str]]):
-
         for adj_lst in actual_graph:
             if len(adj_lst) == 1:
                 continue
             adj_lst[1:] = sorted(adj_lst[1:])
             self.assertIn(adj_lst, expected_graph)
-
 
     def test_composition(self):
         inputs = self.read_data(self.dataPath+"/composition_inputs/test", "str", 5)
@@ -61,6 +56,26 @@ class TestAssemblyAlgorithm(unittest.TestCase):
         actual = []
         for input in inputs:
             actual.append(self.uut.overlap(input))
+
+        for g1, g2 in zip(expected, actual):
+            self.compare_graphs(self.input_to_graph(g1), g2)
+
+    def test_deBruijn_graph(self):
+        inputs = self.read_data(self.dataPath+"/deburijn_graph_inputs/test", "str", 5)
+        expected = self.read_data(self.dataPath+"/deburijn_graph_outputs/test", "str", 5)
+        actual = []
+        for input in inputs:
+            actual.append(self.uut.deBruijn_graph(int(input[0]), input[1]))
+
+        for g1, g2 in zip(expected, actual):
+            self.compare_graphs(self.input_to_graph(g1), g2)
+
+    def test_deBruijn_graph_pattern(self):
+        inputs = self.read_data(self.dataPath+"/deburijn_graph_patterns_inputs/test", "str", 5)
+        expected = self.read_data(self.dataPath+"/deburijn_graph_patterns_outputs/test", "str", 5)
+        actual = []
+        for input in inputs:
+            actual.append(self.uut.deBruijn_graph_pattern(input))
 
         for g1, g2 in zip(expected, actual):
             self.compare_graphs(self.input_to_graph(g1), g2)

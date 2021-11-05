@@ -127,7 +127,7 @@ class AssemblyAlgorithm:
 
         return graph
 
-    def deBruijn_graph_kmers(self, kmers: List[str]) -> List[List[str]]:
+    def deBruijn_graph_pattern(self, kmers: List[str]) -> List[List[str]]:
         """ de Bruijn Graph
 
         Construct de Bruijn graphs without gluing. Given a collection of k-mers
