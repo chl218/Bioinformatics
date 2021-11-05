@@ -115,24 +115,42 @@ class AssemblyAlgorithm:
         return graph
 
 
+
+    def deBruijn_graph_kmers(self, kmers: List[str]) -> List[List[str]]:
+
+        k = len(kmers[0]) - 1
+
+        map = OrderedDict()
+        for kmer in sorted(kmers):
+            p = self.prefix(kmer, k)
+            s = self.suffix(kmer, k)
+            if p in map:
+                map[p].append(s)
+            else:
+                map[p] = [s]
+
+        graph = []
+        for key, val in map.items():
+            graph.append([key] + sorted(val))
+
+        return graph
+
 uut = AssemblyAlgorithm()
 
 input = None
-with open("/home/chl218/Downloads/dataset_199_6.txt") as f:
+with open("/home/chl218/Downloads/dataset_200_8.txt") as f:
     input = f.read().splitlines()
 # uut.print_adjacency_graph(uut.overlap(input))
 
 
+kmers = [
+    "GAGG",
+    "CAGG",
+    "GGGG",
+    "GGGA",
+    "CAGG",
+    "AGGG",
+    "GGAG"
+]
 
-# k = 4
-# t = "AAGATTCTCTAAGA"
-# kmers = uut.composition(k, t)
-# print(t, kmers)
-
-# uut.print_adjacency_graph(uut.overlap(kmers), False)
-
-
-# k = 4
-# t = "AAGATTCTCTAAGA"
-
-# uut.print_adjacency_graph(uut.deBruijn_graph(int(input[0]), input[1]))
+uut.print_adjacency_graph(uut.deBruijn_graph_kmers(input))
