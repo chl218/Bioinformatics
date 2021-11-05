@@ -24,7 +24,15 @@ class AssemblyAlgorithm:
         return res
 
     def genome_path(self, kmers: List[str]) -> str:
+        """ Genome Path
 
+        Reconstruct a string from its genome path.
+        Input:  A sequence path of k-mers Pattern_1, ... ,Pattern_n such that
+                the last k - 1 symbols of Pattern_i are equal to the first k-1
+                symbols of Pattern_i+1 for 1 <= i <= n-1.
+        Output: A string Text of length k+n-1 such that the i-th k-mer in Text
+                is equal to Pattern_i (for 1 <= i <= n).
+        """
         k = len(kmers[0])
 
         genome = kmers[0]
@@ -39,7 +47,6 @@ class AssemblyAlgorithm:
 
     def suffix(self, s: str, k: int) -> str:
         return s[-k:]
-
 
     def overlap(self, kmers: List[str]) -> List[List[str]]:
         """ Overlap Graph
@@ -81,7 +88,6 @@ class AssemblyAlgorithm:
                 s += adj[i] + ","
             print(s[:-1])
 
-
     def path_graph(self, k: int, text: str) -> List[str]:
         """ Path Graph
 
@@ -98,7 +104,14 @@ class AssemblyAlgorithm:
         return path
 
     def deBruijn_graph(self, k: int, text: str) -> List[List[str]]:
+        """ de Burijn Graph
 
+        Given a genome Text, PathGraph(k, Text) is the path consisting of
+        |Text| - k + 1 edges, where the i-th edge of this path is labeled by
+        the i-th k-mer in Text and the i-th node of the path is labeled by the
+        i-th (k - 1)-mer in Text. The de Bruijn graph DeBruijn(k, Text) is
+        formed by gluing identically labeled nodes in PathGraphk(Text).
+        """
         path = self.path_graph(k, text)
 
         map = OrderedDict()
@@ -114,10 +127,16 @@ class AssemblyAlgorithm:
 
         return graph
 
-
-
     def deBruijn_graph_kmers(self, kmers: List[str]) -> List[List[str]]:
+        """ de Bruijn Graph
 
+        Construct de Bruijn graphs without gluing. Given a collection of k-mers
+        Patterns, the nodes of DeBruijn(k, Patterns) are simply all unique
+        (k−1)-mers occurring as a prefix or suffix in Patterns.
+
+        For every k-mer in Patterns, we connect its prefix node to its suffix
+        node by a directed edge in order to produce DeBruijn(Patterns).
+        """
         k = len(kmers[0]) - 1
 
         map = OrderedDict()
@@ -134,23 +153,3 @@ class AssemblyAlgorithm:
             graph.append([key] + sorted(val))
 
         return graph
-
-uut = AssemblyAlgorithm()
-
-input = None
-with open("/home/chl218/Downloads/dataset_200_8.txt") as f:
-    input = f.read().splitlines()
-# uut.print_adjacency_graph(uut.overlap(input))
-
-
-kmers = [
-    "GAGG",
-    "CAGG",
-    "GGGG",
-    "GGGA",
-    "CAGG",
-    "AGGG",
-    "GGAG"
-]
-
-uut.print_adjacency_graph(uut.deBruijn_graph_kmers(input))
