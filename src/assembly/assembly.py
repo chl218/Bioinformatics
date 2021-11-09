@@ -153,3 +153,23 @@ class AssemblyAlgorithm:
             graph.append([key] + sorted(val))
 
         return graph
+
+
+    def make_adjacency_graph(self, input: List[str], isInt: True) -> List[List]:
+
+        graph = []
+        for adjacency in sorted(input):
+            tokens = adjacency.split("->")
+
+            if isInt:
+                node = int(tokens[0].strip())
+                connectedTo = sorted([int(x.strip()) for x in tokens[1].split(",")])
+            else:
+                node = tokens[0].strip()
+                connectedTo = sorted([x.strip() for x in tokens[1].split(",")])
+
+            graph.append([node] + connectedTo)
+
+        return graph
+
+
