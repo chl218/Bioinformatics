@@ -79,3 +79,6 @@ class TestAssemblyAlgorithm(unittest.TestCase):
 
         for g1, g2 in zip(expected, actual):
             self.compare_graphs(self.input_to_graph(g1), g2)
+
+if __name__ == '__main__':
+    unittest.main()
