@@ -172,39 +172,37 @@ class AssemblyAlgorithm:
 
     def eulerian_path(self, graph: dict) -> List:
 
-        visited = []
-
-
-
         edges = []
         for node, adj_nodes in graph.items():
             for node_j in adj_nodes:
                 edges.append((node, node_j))
 
-
+        print(edges)
+        visited = []
         cycles = []
         while edges:
-            edge = edges.pop()
 
+            edge = edges.pop(0)
             if edge in visited:
                 continue
 
-            path = [graph[edge[0]]]
+            path = [edge[0]]
             cycle = []
             while path:
-                nodes = path.pop()
-                print(nodes)
-                if cycle and nodes[0] == cycle[0]:
+                node = path.pop()
+                if cycle and node == cycle[0]:
                     break
 
-                cycle.append(nodes[0])
-                for i in range(1, len(nodes)):
-                    if (nodes[0], nodes[i]) not in visited:
-                        path.append(graph[nodes[i]])
-                        visited.append((nodes[0], nodes[i]))
+                cycle.append(node)
+                for adj_node in graph[node]:
+                    if (node, adj_node) not in visited:
+                        path.append(adj_node)
+                        visited.append((node, adj_node))
                         break
-                print(cycle)
+
+
             cycles.append(cycle)
+            print(cycles)
 
         return cycles
 
@@ -212,6 +210,7 @@ class AssemblyAlgorithm:
 uut = AssemblyAlgorithm()
 
 input = [
+    "9 -> 6",
     "0 -> 3",
     "1 -> 0",
     "2 -> 1,6",
@@ -220,8 +219,7 @@ input = [
     "5 -> 4",
     "6 -> 5,8",
     "7 -> 9",
-    "8 -> 7",
-    "9 -> 6",
+    "8 -> 7"
 ]
 graph = uut.make_adjacency_graph(input)
 
