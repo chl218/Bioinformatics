@@ -1,4 +1,5 @@
 
+from collections import deque
 from typing import List, OrderedDict
 
 
@@ -155,21 +156,78 @@ class AssemblyAlgorithm:
         return graph
 
 
-    def make_adjacency_graph(self, input: List[str], isInt: True) -> List[List]:
+    def make_adjacency_graph(self, input: List[str]) -> dict:
 
-        graph = []
+        graph = {}
         for adjacency in sorted(input):
             tokens = adjacency.split("->")
-
-            if isInt:
-                node = int(tokens[0].strip())
-                connectedTo = sorted([int(x.strip()) for x in tokens[1].split(",")])
-            else:
-                node = tokens[0].strip()
-                connectedTo = sorted([x.strip() for x in tokens[1].split(",")])
-
-            graph.append([node] + connectedTo)
-
+            node = tokens[0].strip()
+            connectedTo = sorted([x.strip() for x in tokens[1].split(",")])
+            graph[node] = connectedTo
         return graph
 
 
+
+
+
+    def eulerian_path(self, graph: dict) -> List:
+
+        visited = []
+
+
+
+        edges = []
+        for node, adj_nodes in graph.items():
+            for node_j in adj_nodes:
+                edges.append((node, node_j))
+
+
+        cycles = []
+        while edges:
+            edge = edges.pop()
+
+            if edge in visited:
+                continue
+
+            path = [graph[edge[0]]]
+            cycle = []
+            while path:
+                nodes = path.pop()
+                print(nodes)
+                if cycle and nodes[0] == cycle[0]:
+                    break
+
+                cycle.append(nodes[0])
+                for i in range(1, len(nodes)):
+                    if (nodes[0], nodes[i]) not in visited:
+                        path.append(graph[nodes[i]])
+                        visited.append((nodes[0], nodes[i]))
+                        break
+                print(cycle)
+            cycles.append(cycle)
+
+        return cycles
+
+
+uut = AssemblyAlgorithm()
+
+input = [
+    "0 -> 3",
+    "1 -> 0",
+    "2 -> 1,6",
+    "3 -> 2",
+    "4 -> 2",
+    "5 -> 4",
+    "6 -> 5,8",
+    "7 -> 9",
+    "8 -> 7",
+    "9 -> 6",
+]
+graph = uut.make_adjacency_graph(input)
+
+
+
+
+# print(graph)
+
+print(uut.eulerian_path(graph))
