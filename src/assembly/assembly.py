@@ -177,7 +177,6 @@ class AssemblyAlgorithm:
             for node_j in adj_nodes:
                 edges.append((node, node_j))
 
-        print(edges)
         visited = []
         cycles = []
         while edges:
@@ -202,7 +201,6 @@ class AssemblyAlgorithm:
 
 
             cycles.append(cycle)
-            print(cycles)
 
         return self.combine_cycles(cycles)
 
@@ -213,10 +211,12 @@ class AssemblyAlgorithm:
         while cycles:
 
             sub_path = cycles.pop()
-            intersect = (set(path) & set(sub_path)).pop()
+            intersect = (set(path) & set(sub_path))
+            if not intersect:
+                cycles.insert(0, sub_path)
+                continue
 
-            print(intersect, path, sub_path)
-
+            intersect = intersect.pop()
             combined = []
             for i in range(sub_path.index(intersect), len(sub_path)):
                 combined.append(sub_path[i])
@@ -229,30 +229,64 @@ class AssemblyAlgorithm:
 
             path = combined
 
-        return path
+        return path + [path[0]]
+
+    def print_path(self, input: List[str]) -> str:
+        return ' -> '.join(input)
+
 
 uut = AssemblyAlgorithm()
 
-input = [
-    "1 -> 2",
-    "2 -> 3",
-    "3 -> 4",
-    "4 -> 5,7",
-    "5 -> 6",
-    "6 -> 4",
-    "7 -> 8",
-    "8 -> 9",
-    "9 -> 7"
-]
+
+
+
+input = None
+with open("/home/chl218/Downloads/dataset_203_2(2).txt") as f:
+    input = f.read().splitlines()
+
 graph = uut.make_adjacency_graph(input)
+print('->'.join(uut.eulerian_path(graph)))
 
 
-# print(uut.eulerian_path(graph))
 
 
-l1 = [0,3,2,1]
-l2 = [2,6,5,4]
-l3 = [6,8,7,9]
 
 
-print(uut.combine_cycles([l1, l2, l3]))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# input1 = [
+#     "9 -> 6",
+#     "6 -> 5,8",
+#     "0 -> 3",
+#     "1 -> 0",
+#     "2 -> 1,6",
+#     "3 -> 2",
+#     "4 -> 2",
+#     "5 -> 4",
+#     "7 -> 9",
+#     "8 -> 7",
+# ]
+# print(' -> '.join(uut.eulerian_path(uut.make_adjacency_graph(input1))))
+
+
+# input2 = [
+#     "0 -> 1,2,3,4",
+#     "1 -> 0,2,3,4",
+#     "2 -> 0,1,3,4",
+#     "3 -> 0,1,2,4",
+#     "4 -> 0,1,2,3"
+# ]
+# print(' -> '.join(uut.eulerian_path(uut.make_adjacency_graph(input2))))
+# # 3->4->3->1->3->0->2->0->4->0->3->2->1->0->1->2->4->1->4->2->3
