@@ -155,7 +155,6 @@ class AssemblyAlgorithm:
 
         return graph
 
-
     def make_adjacency_graph(self, input: List[str]) -> dict:
 
         graph = {}
@@ -166,12 +165,12 @@ class AssemblyAlgorithm:
             graph[node] = connectedTo
         return graph
 
+    def eulerian_cycle(self, graph: dict) -> List:
+        """ Eulerian Cycle
 
-
-
-
-    def eulerian_path(self, graph: dict) -> List:
-
+        Input: The adjacency list of an Eulerian directed graph.
+        Output: An Eulerian cycle in this graph.
+        """
         edges = []
         for node, adj_nodes in graph.items():
             for node_j in adj_nodes:
@@ -179,12 +178,16 @@ class AssemblyAlgorithm:
 
         visited = []
         cycles = []
+
+        # while there are unexplored edges in Graph
         while edges:
 
+            #  select a node newStart in Cycle with still unexplored edges
             edge = edges.pop(0)
             if edge in visited:
                 continue
 
+            # form Cycle’ by traversing Cycle (starting at newStart) and then randomly walking
             path = [edge[0]]
             cycle = []
             while path:
@@ -199,12 +202,17 @@ class AssemblyAlgorithm:
                         visited.append((node, adj_node))
                         break
 
-
+            # Cycle <- Cycle’
             cycles.append(cycle)
 
         return self.combine_cycles(cycles)
 
     def combine_cycles(self, cycles: List[List]) -> List:
+        """ Combine Cycles
+
+        Combine cycles in an Eulerian Graph, e.g. balanced graph where indegree
+        and outdegree of a node v is the same for all nodes in the graph
+        """
 
         path = cycles.pop()
 
@@ -216,6 +224,8 @@ class AssemblyAlgorithm:
                 cycles.insert(0, sub_path)
                 continue
 
+            # Rotate the intersect node_v to front as the starting path, then
+            # combine the two paths beginning and ending at node_v
             intersect = intersect.pop()
             combined = []
             for i in range(sub_path.index(intersect), len(sub_path)):
@@ -231,8 +241,6 @@ class AssemblyAlgorithm:
 
         return path + [path[0]]
 
-    def print_path(self, input: List[str]) -> str:
-        return ' -> '.join(input)
 
 
 uut = AssemblyAlgorithm()
@@ -245,48 +253,6 @@ with open("/home/chl218/Downloads/dataset_203_2(2).txt") as f:
     input = f.read().splitlines()
 
 graph = uut.make_adjacency_graph(input)
-print('->'.join(uut.eulerian_path(graph)))
+print('->'.join(uut.eulerian_cycle(graph)))
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# input1 = [
-#     "9 -> 6",
-#     "6 -> 5,8",
-#     "0 -> 3",
-#     "1 -> 0",
-#     "2 -> 1,6",
-#     "3 -> 2",
-#     "4 -> 2",
-#     "5 -> 4",
-#     "7 -> 9",
-#     "8 -> 7",
-# ]
-# print(' -> '.join(uut.eulerian_path(uut.make_adjacency_graph(input1))))
-
-
-# input2 = [
-#     "0 -> 1,2,3,4",
-#     "1 -> 0,2,3,4",
-#     "2 -> 0,1,3,4",
-#     "3 -> 0,1,2,4",
-#     "4 -> 0,1,2,3"
-# ]
-# print(' -> '.join(uut.eulerian_path(uut.make_adjacency_graph(input2))))
-# # 3->4->3->1->3->0->2->0->4->0->3->2->1->0->1->2->4->1->4->2->3
