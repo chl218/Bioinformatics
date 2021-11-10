@@ -204,28 +204,55 @@ class AssemblyAlgorithm:
             cycles.append(cycle)
             print(cycles)
 
-        return cycles
+        return self.combine_cycles(cycles)
 
+    def combine_cycles(self, cycles: List[List]) -> List:
+
+        path = cycles.pop()
+
+        while cycles:
+
+            sub_path = cycles.pop()
+            intersect = (set(path) & set(sub_path)).pop()
+
+            print(intersect, path, sub_path)
+
+            combined = []
+            for i in range(sub_path.index(intersect), len(sub_path)):
+                combined.append(sub_path[i])
+            for i in range(0, sub_path.index(intersect)):
+                combined.append(sub_path[i])
+            for i in range(path.index(intersect), len(path)):
+                combined.append(path[i])
+            for i in range(0, path.index(intersect)):
+                combined.append(path[i])
+
+            path = combined
+
+        return path
 
 uut = AssemblyAlgorithm()
 
 input = [
-    "9 -> 6",
-    "0 -> 3",
-    "1 -> 0",
-    "2 -> 1,6",
-    "3 -> 2",
-    "4 -> 2",
-    "5 -> 4",
-    "6 -> 5,8",
-    "7 -> 9",
-    "8 -> 7"
+    "1 -> 2",
+    "2 -> 3",
+    "3 -> 4",
+    "4 -> 5,7",
+    "5 -> 6",
+    "6 -> 4",
+    "7 -> 8",
+    "8 -> 9",
+    "9 -> 7"
 ]
 graph = uut.make_adjacency_graph(input)
 
 
+# print(uut.eulerian_path(graph))
 
 
-# print(graph)
+l1 = [0,3,2,1]
+l2 = [2,6,5,4]
+l3 = [6,8,7,9]
 
-print(uut.eulerian_path(graph))
+
+print(uut.combine_cycles([l1, l2, l3]))
