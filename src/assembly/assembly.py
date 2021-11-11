@@ -241,18 +241,46 @@ class AssemblyAlgorithm:
 
         return path + [path[0]]
 
+    def eulerian_path(self, graph: dict) -> List:
+        edges = []
+        degrees = {}
+        for node, adj_nodes in graph.items():
+            if not node in degrees:
+                degrees[node] = 0
+
+            for node_j in adj_nodes:
+
+                degrees[node] += 1
+                if not node_j in degrees:
+                    degrees[node_j] = -1
+                else:
+                    degrees[node_j] -= 1
+                edges.append((node, node_j))
+
+
+        print(edges)
+        print(degrees)
 
 
 uut = AssemblyAlgorithm()
 
+graph = [
+    "0 -> 2",
+    "1 -> 3",
+    "2 -> 1",
+    "3 -> 0,4",
+    "6 -> 3,7",
+    "7 -> 8",
+    "8 -> 9",
+    "9 -> 6"
+]
+uut.eulerian_path(uut.make_adjacency_graph(graph))
 
+# input = None
+# with open("/home/chl218/Downloads/dataset_203_2(2).txt") as f:
+#     input = f.read().splitlines()
 
-
-input = None
-with open("/home/chl218/Downloads/dataset_203_2(2).txt") as f:
-    input = f.read().splitlines()
-
-graph = uut.make_adjacency_graph(input)
-print('->'.join(uut.eulerian_cycle(graph)))
+# graph = uut.make_adjacency_graph(input)
+# print('->'.join(uut.eulerian_cycle(graph)))
 
 
