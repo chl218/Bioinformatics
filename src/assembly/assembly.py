@@ -254,68 +254,56 @@ class AssemblyAlgorithm:
                 else:
                     degrees[node_j] -= 1
 
-        # if the indegress and outdegrees does not sum to zero, cannot add edges
-        # to make an Eulerian path to an Eulerian graph
-        if sum(degrees.values()) != 0:
-            return None
-
-
-
-
-
-        unbalanced_nodes = []
+        # Assume input graph is correct, there will only be two unbalanced nodes
+        # since it is a dna string e.g. beginning/end of dna string
+        src_node = None
+        dst_node = None
         for node, degrees in degrees.items():
-            if degrees != 0:
-                unbalanced_nodes.append((node, degrees))
+            if degrees > 0:
+                dst_node = node
+            if degrees < 0:
+                src_node = node
 
+        if not src_node in graph:
+            graph[src_node] = [dst_node]
+        else:
+            graph[src_node].append(dst_node)
 
-        print("unbalanced nodes", unbalanced_nodes)
-        print("before graph:", graph)
+        print("after graph: ", graph)
 
-        while unbalanced_nodes:
+        eulerian_cycle = self.eulerian_cycle(graph)
 
-            node_i = unbalanced_nodes.pop()
+        # break the edge, rotate the path
+        src_idx = None
+        dst_idx = None
+        for i in range(len(eulerian_cycle)-1):
+            if eulerian_cycle[i] == src_node and eulerian_cycle[i+1] == dst_node:
+                src_idx = i
+                dst_idx = i+1
 
-            # find the node_i and node_j with the opposite degrees
-            for idx, node_j in enumerate(unbalanced_nodes):
-                if node_i[1] + node_j[1] == 0:
-                    unbalanced_nodes.remove(node_j)
-
-
-                    if node_i[1] < 0:
-                        src_node = node_j[0]
-                        dst_node = node_i[0]
-                    else:
-                        src_node = node_i[0]
-                        dst_node = node_j[0]
-
-                    # for each missing edge, add it
-                    for _ in range(abs(node_i[1])):
-                        graph[src_node].append(dst_node)
-
-
-        print("after graph:", graph)
-
+        return eulerian_cycle[dst_idx:-1] + eulerian_cycle[:src_idx+1]
 
 uut = AssemblyAlgorithm()
 
-graph = [
-    "0 -> 2",
-    "1 -> 3",
-    "2 -> 1",
-    "3 -> 0,4",
-    "6 -> 3,7",
-    "7 -> 8",
-    "8 -> 9",
-    "9 -> 6"
-]
-uut.eulerian_path(uut.make_adjacency_graph(graph))
+# graph = [
+#     "0 -> 2",
+#     "1 -> 3",
+#     "2 -> 1",
+#     "3 -> 0,4",
+#     "6 -> 3,7",
+#     "7 -> 8",
+#     "8 -> 9",
+#     "9 -> 6"
+# ]
+# path = uut.eulerian_path(uut.make_adjacency_graph(graph))
 
-# input = None
-# with open("/home/chl218/Downloads/dataset_203_2(2).txt") as f:
-#     input = f.read().splitlines()
+# print('->'.join(path))
 
-# graph = uut.make_adjacency_graph(input)
-# print('->'.join(uut.eulerian_cycle(graph)))
+input = None
+with open("/home/chl218/repos/Bioinformatics/data/assembly/eulerian_path_inputs/test4.txt") as f:
+    input = f.read().splitlines()
+
+graph = uut.make_adjacency_graph(input)
+print('->'.join(uut.eulerian_path(graph)))
 
 
