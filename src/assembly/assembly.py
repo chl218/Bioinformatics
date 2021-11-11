@@ -242,24 +242,59 @@ class AssemblyAlgorithm:
         return path + [path[0]]
 
     def eulerian_path(self, graph: dict) -> List:
-        edges = []
         degrees = {}
         for node, adj_nodes in graph.items():
             if not node in degrees:
                 degrees[node] = 0
 
             for node_j in adj_nodes:
-
                 degrees[node] += 1
                 if not node_j in degrees:
                     degrees[node_j] = -1
                 else:
                     degrees[node_j] -= 1
-                edges.append((node, node_j))
+
+        # if the indegress and outdegrees does not sum to zero, cannot add edges
+        # to make an Eulerian path to an Eulerian graph
+        if sum(degrees.values()) != 0:
+            return None
 
 
-        print(edges)
-        print(degrees)
+
+
+
+        unbalanced_nodes = []
+        for node, degrees in degrees.items():
+            if degrees != 0:
+                unbalanced_nodes.append((node, degrees))
+
+
+        print("unbalanced nodes", unbalanced_nodes)
+        print("before graph:", graph)
+
+        while unbalanced_nodes:
+
+            node_i = unbalanced_nodes.pop()
+
+            # find the node_i and node_j with the opposite degrees
+            for idx, node_j in enumerate(unbalanced_nodes):
+                if node_i[1] + node_j[1] == 0:
+                    unbalanced_nodes.remove(node_j)
+
+
+                    if node_i[1] < 0:
+                        src_node = node_j[0]
+                        dst_node = node_i[0]
+                    else:
+                        src_node = node_i[0]
+                        dst_node = node_j[0]
+
+                    # for each missing edge, add it
+                    for _ in range(abs(node_i[1])):
+                        graph[src_node].append(dst_node)
+
+
+        print("after graph:", graph)
 
 
 uut = AssemblyAlgorithm()
