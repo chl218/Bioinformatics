@@ -242,6 +242,7 @@ class AssemblyAlgorithm:
         return path + [path[0]]
 
     def eulerian_path(self, graph: dict) -> List:
+
         degrees = {}
         for node, adj_nodes in graph.items():
             if not node in degrees:
@@ -269,11 +270,9 @@ class AssemblyAlgorithm:
         else:
             graph[src_node].append(dst_node)
 
-        print("after graph: ", graph)
-
-        eulerian_cycle = self.eulerian_cycle(graph)
 
         # break the edge, rotate the path
+        eulerian_cycle = self.eulerian_cycle(graph)
         src_idx = None
         dst_idx = None
         for i in range(len(eulerian_cycle)-1):
@@ -299,11 +298,11 @@ uut = AssemblyAlgorithm()
 
 # print('->'.join(path))
 
-input = None
-with open("/home/chl218/repos/Bioinformatics/data/assembly/eulerian_path_inputs/test4.txt") as f:
-    input = f.read().splitlines()
+# input = None
+# with open("/home/chl218/Downloads/dataset_203_6.txt") as f:
+#     input = f.read().splitlines()
 
-graph = uut.make_adjacency_graph(input)
-print('->'.join(uut.eulerian_path(graph)))
+# graph = uut.make_adjacency_graph(input)
+# print('->'.join(uut.eulerian_path(graph)))
 
 
