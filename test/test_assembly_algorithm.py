@@ -80,5 +80,54 @@ class TestAssemblyAlgorithm(unittest.TestCase):
         for g1, g2 in zip(expected, actual):
             self.compare_graphs(self.input_to_graph(g1), g2)
 
+    def test_eulerian_cycle(self):
+        expected = self.read_data(self.dataPath+"/eulerian_cycle_outputs/test", "str", 7)
+
+        inputs = []
+        for input in self.read_data(self.dataPath+"/eulerian_cycle_inputs/test", "str", 7):
+            inputs.append(self.uut.make_adjacency_graph(input))
+
+        actual = []
+        for input in inputs:
+            actual.append(self.uut.eulerian_cycle(input))
+
+        for cycle, graph in zip(actual, inputs):
+            edges = []
+            for src, dsts in graph.items():
+                for dst in dsts:
+                    edges.append((src, dst))
+
+            visited_edges = 0
+            for i in range(len(cycle)-1):
+                self.assertIn((cycle[i], cycle[i+1]), edges)
+                visited_edges += 1
+
+            self.assertEqual(len(edges), visited_edges)
+
+    def test_eulerian_path(self):
+        expected = self.read_data(self.dataPath+"/eulerian_path_outputs/test", "str", 6)
+
+        inputs = []
+        for input in self.read_data(self.dataPath+"/eulerian_path_inputs/test", "str", 6):
+            inputs.append(self.uut.make_adjacency_graph(input))
+
+        actual = []
+        for input in inputs:
+            actual.append(self.uut.eulerian_path(input))
+
+        for cycle, graph in zip(actual, inputs):
+            edges = []
+            for src, dsts in graph.items():
+                for dst in dsts:
+                    edges.append((src, dst))
+
+            visited_edges = 0
+            for i in range(len(cycle)-1):
+                self.assertIn((cycle[i], cycle[i+1]), edges)
+                visited_edges += 1
+
+            self.assertEqual(len(edges), visited_edges+1)
+
+
 if __name__ == '__main__':
     unittest.main()
