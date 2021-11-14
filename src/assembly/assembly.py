@@ -38,7 +38,6 @@ class AssemblyAlgorithm:
 
         genome = kmers[0]
         for i in range(1, len(kmers)):
-            print(kmers[i], kmers[i][k-1])
             genome += kmers[i][k-1]
 
         return genome
@@ -128,7 +127,7 @@ class AssemblyAlgorithm:
 
         return graph
 
-    def deBruijn_graph_pattern(self, kmers: List[str]) -> List[List[str]]:
+    def deBruijn_graph_pattern(self, kmers: List[str]) -> dict:
         """ de Bruijn Graph
 
         Construct de Bruijn graphs without gluing. Given a collection of k-mers
@@ -140,18 +139,14 @@ class AssemblyAlgorithm:
         """
         k = len(kmers[0]) - 1
 
-        map = OrderedDict()
+        graph = OrderedDict()
         for kmer in sorted(kmers):
             p = self.prefix(kmer, k)
             s = self.suffix(kmer, k)
-            if p in map:
-                map[p].append(s)
+            if p in graph:
+                graph[p].append(s)
             else:
-                map[p] = [s]
-
-        graph = []
-        for key, val in map.items():
-            graph.append([key] + sorted(val))
+                graph[p] = [s]
 
         return graph
 
@@ -282,7 +277,28 @@ class AssemblyAlgorithm:
 
         return eulerian_cycle[dst_idx:-1] + eulerian_cycle[:src_idx+1]
 
+    def string_reconstruction(self, pattern: List[str]) -> str:
+
+        graph = self.deBruijn_graph_pattern(pattern)
+        path = self.eulerian_path(graph)
+        return self.genome_path(path)
+
+
 uut = AssemblyAlgorithm()
+
+
+# k = 4
+# pattern = [
+#     "CTTA",
+#     "ACCA",
+#     "TACC",
+#     "GGCT",
+#     "GCTT",
+#     "TTAC",
+# ]
+
+# print(uut.string_reconstruction(pattern))
+
 
 # graph = [
 #     "0 -> 2",
@@ -298,9 +314,12 @@ uut = AssemblyAlgorithm()
 
 # print('->'.join(path))
 
-# input = None
-# with open("/home/chl218/Downloads/dataset_203_6.txt") as f:
-#     input = f.read().splitlines()
+input = None
+with open("/home/chl218/Downloads/dataset_203_7.txt") as f:
+    input = f.read().splitlines()
+
+
+print(uut.string_reconstruction(input[1:]))
 
 # graph = uut.make_adjacency_graph(input)
 # print('->'.join(uut.eulerian_path(graph)))
