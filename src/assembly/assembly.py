@@ -39,6 +39,7 @@ class AssemblyAlgorithm:
         genome = kmers[0]
         for i in range(1, len(kmers)):
             genome += kmers[i][k-1]
+            # print(kmers[i], kmers[i][k-1], genome)
 
         return genome
 
@@ -103,7 +104,7 @@ class AssemblyAlgorithm:
 
         return path
 
-    def deBruijn_graph(self, k: int, text: str) -> List[List[str]]:
+    def deBruijn_graph(self, k: int, text: str) -> dict:
         """ de Burijn Graph
 
         Given a genome Text, PathGraph(k, Text) is the path consisting of
@@ -114,16 +115,12 @@ class AssemblyAlgorithm:
         """
         path = self.path_graph(k, text)
 
-        map = OrderedDict()
+        graph = {}
         for kmer in sorted(path):
-            map[kmer] = []
+            graph[kmer] = []
 
         for i in range(len(path)-1):
-            map[path[i]].append(path[i+1])
-
-        graph = []
-        for key, val in map.items():
-            graph.append([key] + val)
+            graph[path[i]].append(path[i+1])
 
         return graph
 
@@ -139,7 +136,7 @@ class AssemblyAlgorithm:
         """
         k = len(kmers[0]) - 1
 
-        graph = OrderedDict()
+        graph = {}
         for kmer in sorted(kmers):
             p = self.prefix(kmer, k)
             s = self.suffix(kmer, k)
@@ -260,11 +257,11 @@ class AssemblyAlgorithm:
             if degrees < 0:
                 src_node = node
 
-        if not src_node in graph:
-            graph[src_node] = [dst_node]
-        else:
-            graph[src_node].append(dst_node)
-
+        if src_node and dst_node:
+            if not src_node in graph:
+                graph[src_node] = [dst_node]
+            else:
+                graph[src_node].append(dst_node)
 
         # break the edge, rotate the path
         eulerian_cycle = self.eulerian_cycle(graph)
@@ -275,53 +272,40 @@ class AssemblyAlgorithm:
                 src_idx = i
                 dst_idx = i+1
 
-        return eulerian_cycle[dst_idx:-1] + eulerian_cycle[:src_idx+1]
+        if src_node and dst_node:
+            return eulerian_cycle[dst_idx:-1] + eulerian_cycle[:src_idx+1]
+        return eulerian_cycle
 
     def string_reconstruction(self, pattern: List[str]) -> str:
-
         graph = self.deBruijn_graph_pattern(pattern)
         path = self.eulerian_path(graph)
         return self.genome_path(path)
 
+    def permutate_k(self, k: int) -> List[str]:
+        perm = []
+        for i in range(2**k):
+            # get binary representation of i, remove "0b" and zero fill MSB
+            perm.append(str(bin(i)[2:].zfill(k)))
+        return perm
+
+    def universal_string(self, pattern: List[str]) -> str:
+        graph = self.deBruijn_graph_pattern(pattern)
+        path = self.eulerian_path(graph)
+        uni_str = self.genome_path(path[:-(len(pattern[0]) - 1)])
+        return uni_str
+
 
 uut = AssemblyAlgorithm()
 
+# input = None
+# with open("/home/chl218/Downloads/dataset_203_11.txt") as f:
+#     input = f.read().splitlines()
 
-# k = 4
-# pattern = [
-#     "CTTA",
-#     "ACCA",
-#     "TACC",
-#     "GGCT",
-#     "GCTT",
-#     "TTAC",
-# ]
+perm_k = uut.permutate_k(12)
+xs = uut.universal_string(perm_k)
+print("->", len(xs), xs)
 
-# print(uut.string_reconstruction(pattern))
-
-
-# graph = [
-#     "0 -> 2",
-#     "1 -> 3",
-#     "2 -> 1",
-#     "3 -> 0,4",
-#     "6 -> 3,7",
-#     "7 -> 8",
-#     "8 -> 9",
-#     "9 -> 6"
-# ]
-# path = uut.eulerian_path(uut.make_adjacency_graph(graph))
-
-# print('->'.join(path))
-
-input = None
-with open("/home/chl218/Downloads/dataset_203_7.txt") as f:
-    input = f.read().splitlines()
-
-
-print(uut.string_reconstruction(input[1:]))
-
-# graph = uut.make_adjacency_graph(input)
-# print('->'.join(uut.eulerian_path(graph)))
-
-
+for x in perm_k:
+    if x not in xs:
+        if x not in xs[len(xs)//2:] + xs[:len(xs)//2]:
+            print(x, "not it")
