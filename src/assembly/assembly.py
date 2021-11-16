@@ -294,18 +294,43 @@ class AssemblyAlgorithm:
         uni_str = self.genome_path(path[:-(len(pattern[0]) - 1)])
         return uni_str
 
+    def read_pairs(self, k: int, d: int, s: str) -> List:
+
+        n = len(s) - k - k - d + 1
+
+        res = []
+        for i in range(n):
+            read1 = s[i:i+k]
+            read2 = s[i+k+d:i+k+d+k]
+            res.append((read1, read2))
+
+        return sorted(res)
+
+
+    def print_read_pairs(self, read_pairs: List):
+        for pairs in read_pairs:
+            print("({0}|{1})".format(pairs[0], pairs[1]), end=" ")
+        print()
+
+
+
+
 
 uut = AssemblyAlgorithm()
+
+
+uut.print_read_pairs(uut.read_pairs(3,2,"TAATGCCATGGGATGTT"))
+
 
 # input = None
 # with open("/home/chl218/Downloads/dataset_203_11.txt") as f:
 #     input = f.read().splitlines()
 
-perm_k = uut.permutate_k(16)
-xs = uut.universal_string(perm_k)
-print("->", len(xs), xs)
+# perm_k = uut.permutate_k(16)
+# xs = uut.universal_string(perm_k)
+# print("->", len(xs), xs)
 
-for x in perm_k:
-    if x not in xs:
-        if x not in xs[len(xs)//2:] + xs[:len(xs)//2]:
-            print(x, "not it")
+# for x in perm_k:
+#     if x not in xs:
+#         if x not in xs[len(xs)//2:] + xs[:len(xs)//2]:
+#             print(x, "not it")
