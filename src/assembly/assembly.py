@@ -301,7 +301,7 @@ uut = AssemblyAlgorithm()
 # with open("/home/chl218/Downloads/dataset_203_11.txt") as f:
 #     input = f.read().splitlines()
 
-perm_k = uut.permutate_k(12)
+perm_k = uut.permutate_k(16)
 xs = uut.universal_string(perm_k)
 print("->", len(xs), xs)
 
