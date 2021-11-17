@@ -314,12 +314,42 @@ class AssemblyAlgorithm:
 
 
 
+    def string_spelled_by_gapped_patterns(self, gapped_patterns: List, k: int, d: int) -> str:
 
+        fst_patterns = []
+        snd_patterns = []
+        for pattern_pair in gapped_patterns:
+            fst_patterns.append(pattern_pair[0])
+            snd_patterns.append(pattern_pair[1])
+
+        prefix_str = self.genome_path(fst_patterns)
+        suffix_str = self.genome_path(snd_patterns)
+
+        for i in range(k+d+1, len(prefix_str)):
+            if prefix_str[i] != suffix_str[i - k - d]:
+                return None
+
+        return prefix_str + suffix_str[len(suffix_str)-(k+d):]
 
 uut = AssemblyAlgorithm()
 
 
-uut.print_read_pairs(uut.read_pairs(3,2,"TAATGCCATGGGATGTT"))
+
+
+k = 4
+d = 2
+p = [
+    ("GACC","GCGC"),
+    ("ACCG","CGCC"),
+    ("CCGA","GCCG"),
+    ("CGAG","CCGG"),
+    ("GAGC","CGGA")
+]
+
+
+res = uut.string_spelled_by_gapped_patterns(p, k, d)
+print(res)
+print(res == "GACCGAGCGCCGGA")
 
 
 # input = None
