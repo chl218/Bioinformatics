@@ -7,8 +7,7 @@ sys.path.append(str(path_root))
 
 
 from typing import List
-from src.replication.pattern_finding_algorithm import PatternFindingAlgorithm
-
+from src.chp1_replication.pattern_finding_algorithm import PatternFindingAlgorithm
 
 class GenomeReplicationAlgorithm:
 
